@@ -1,0 +1,9 @@
+# Core dependencies for PhD Deep Read Workflow
+PyMuPDF>=1.24.0           # Fast PDF text extraction
+pytesseract>=0.3.10       # Python wrapper for Tesseract OCR
+Pillow>=10.0.0            # Image processing for OCR
+
+# Note: Tesseract OCR engine must be installed separately:
+# macOS: brew install tesseract
+# Ubuntu/Debian: sudo apt install tesseract-ocr
+# Windows: https://github.com/UB-Mannheim/tesseract/wiki

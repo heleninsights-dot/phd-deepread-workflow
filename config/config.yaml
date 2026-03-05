@@ -1,0 +1,89 @@
+# PhD Deep Read Workflow - Configuration
+
+# Directory paths
+directories:
+  markdown_output: "./markdown_output"
+  structured_notes: "./structured_literature_notes"
+  canvas_templates: "./canvas_templates"
+  generation_prompts: "./generation_prompts"
+  logs: "./logs"
+
+# PDF Extraction Settings
+extraction:
+  # Text-First decision tree thresholds
+  searchable_threshold: 100  # Minimum characters to consider page searchable
+  searchable_percentage: 0.8  # Use PyMuPDF if this % of pages are searchable
+
+  # OCR settings
+  ocr_language: "eng"  # Tesseract language code
+  ocr_engine: "tesseract"  # Only tesseract supported currently
+
+  # Image extraction
+  extract_images: true
+  image_quality: 2  # 0-5, higher is better quality but larger files
+  image_format: "png"  # png or jpeg
+
+  # Performance
+  max_pages: null  # Limit extraction to first N pages (null = all)
+  parallel_processing: false  # Not yet implemented
+
+# Note Generation Settings
+generation:
+  # Template paths
+  clauderules_template: "./templates/.clauderules"
+  canvas_template: "./templates/critical-thinking.canvas"
+
+  # Claude Code integration
+  claude_model: "claude-3-5-sonnet-20241022"  # Default model for note generation
+  max_tokens: 4000
+  temperature: 0.7
+
+  # Output formatting
+  include_wikilinks: true
+  include_callouts: true
+  include_frontmatter: true
+  frontmatter_fields:
+    - category
+    - tags
+    - citekey
+    - status
+    - dateread
+
+# Canvas Settings
+canvas:
+  node_size:
+    width: 400
+    height: 200
+  spacing:
+    horizontal: 50
+    vertical: 50
+  colors:
+    - "1"  # Red
+    - "2"  # Orange
+    - "3"  # Yellow
+    - "4"  # Green
+    - "5"  # Blue
+    - "6"  # Purple
+    - "7"  # Pink
+    - "8"  # Gray
+    - "9"  # Brown
+
+# Batch Processing
+batch:
+  max_workers: 2  # Number of parallel processes
+  skip_existing: true  # Skip PDFs already processed
+  stop_on_error: false  # Continue processing if one PDF fails
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "./logs/phd-deepread.log"
+  max_size_mb: 10
+  backup_count: 5
+
+# Verification
+verification:
+  check_extraction: true
+  check_note_structure: true
+  check_canvas_structure: true
+  pattern_matching: false  # Not yet implemented

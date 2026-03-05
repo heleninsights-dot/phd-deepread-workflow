@@ -1,0 +1,17 @@
+# Default owners for the repository
+* @your-github-username
+
+# Documentation
+README.md @your-github-username
+CONTRIBUTING.md @your-github-username
+CODE_OF_CONDUCT.md @your-github-username
+
+# Core scripts
+scripts/ @your-github-username
+config/ @your-github-username
+
+# Templates
+templates/ @your-github-username
+
+# Tests
+tests/ @your-github-username
