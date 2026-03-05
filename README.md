@@ -5,7 +5,8 @@ thumbnail: thumbnails/external/74a4c4ea2d920c8d9a05a7420946145d.svg
 # PhD Deep Read Workflow
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![PyPI version](https://badge.fury.io/py/phd-deepread-workflow.svg)](https://pypi.org/project/phd-deepread-workflow/)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-6E56CF)](https://claude.com/claude-code)
 
 > Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian using AI-assisted analysis.
@@ -73,34 +74,21 @@ graph TD
 
 ### Prerequisites
 
-- **Python 3.10+** and `pip`
+- **Python 3.9+** and `pip` (Updated to support older Macs)
 - **Tesseract OCR** (optional, for scanned PDFs)
 - **Claude Code** (for note generation)
 
 ### Quick Install
 
+The easiest way to install the workflow is directly from PyPI:
+
 ```bash
-# Clone the repository
-git clone https://github.com/Helen-insights/phd-deepread-workflow.git
-cd phd-deepread-workflow
-
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Install Tesseract OCR (optional but recommended)
-# macOS:
-brew install tesseract
-# Ubuntu/Debian:
-sudo apt install tesseract-ocr
-
-# Install Python OCR wrapper
-pip install pytesseract pillow
-
-# Verify installation
-python scripts/verify.py --extract test_paper.pdf
+pip install phd-deepread-workflow
 ```
 
 ### As a Claude Code Skill
+
+Note: To use this as a Claude Code skill, you should first clone the repository to access the skill files.
 
 ```bash
 # Copy the skill to your Claude Code skills directory
@@ -397,7 +385,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ```bash
 # Clone and install development dependencies
-git clone https://github.com/Helen-insights/phd-deepread-workflow.git
+git clone https://github.com/Heleninsights-dot/phd-deepread-workflow.git
 cd phd-deepread-workflow
 pip install -r requirements-dev.txt
 pre-commit install  # Install git hooks
@@ -417,8 +405,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/Helen-insights/phd-deepread-workflow/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Helen-insights/phd-deepread-workflow/discussions)
+- **Issues**: [GitHub Issues](https://github.com/heleninsights-dot/phd-deepread-workflow/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/heleninsights-dot/phd-deepread-workflow/discussions)
 - **Email**: [heleninsights@gmail.com](mailto:heleninsights@gmail.com)
 
 ## 📈 Roadmap
