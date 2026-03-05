@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  phd-deepread:
+    build: .
+    image: phd-deepread-workflow:latest
+    container_name: phd-deepread
+    volumes:
+      # Mount input PDFs directory
+      - ./input:/input
+      # Mount output directory
+      - ./output:/output
+      # Mount configuration directory (optional)
+      - ./config:/app/config:ro
+      # Mount templates directory (optional)
+      - ./templates:/app/templates:ro
+      # Mount logs directory
+      - ./logs:/app/logs
+    environment:
+      - ENABLE_EFFICIENT_ATTENTION=0
+      - PYTHONPATH=/app
+    working_dir: /app
+    # Example command (override when running)
+    command: ["python", "scripts/phd_deepread.py", "--help"]
+    # Run as non-root user
+    user: "1000:1000"
+    # Resource limits for OCR processing
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+
+  # Optional: Add a web interface service (future)
+  # web-ui:
+  #   build: ./web
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - phd-deepread
+
+volumes:
+  input:
+  output:
+  config:
+  templates:
+  logs:

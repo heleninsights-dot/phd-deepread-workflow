@@ -1,0 +1,121 @@
+#!/bin/bash
+# PhD Deep Read Workflow - Main command wrapper
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+VENV_PYTHON="$PROJECT_DIR/.venv/bin/python"
+VENV_ACTIVATE="$PROJECT_DIR/.venv/bin/activate"
+
+# Function to setup environment
+setup_environment() {
+    # Set environment variable for Surya (legacy, kept for compatibility)
+    export ENABLE_EFFICIENT_ATTENTION=0
+
+    # If virtual environment exists, use it
+    if [[ -f "$VENV_PYTHON" ]]; then
+        # Use venv python by modifying PATH
+        export VIRTUAL_ENV="$PROJECT_DIR/.venv"
+        export PATH="$VIRTUAL_ENV/bin:$PATH"
+        echo -e "🔧 Using project virtual environment: $VIRTUAL_ENV"
+    else
+        echo -e "⚠ Virtual environment not found. Using system Python."
+        echo "   Run 'phd-deepread setup' to create virtual environment."
+    fi
+}
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+print_header() {
+    echo -e "${BLUE}🎓 PhD Deep Read Workflow${NC}"
+    echo -e "${BLUE}=========================${NC}"
+    echo
+}
+
+print_usage() {
+    cat << EOF
+Usage: phd-deepread <command> [options]
+
+Commands:
+  setup       Check dependencies and environment setup
+  extract     Extract text/images from PDFs (Text-First decision tree: PyMuPDF + Tesseract OCR)
+  generate    Generate structured note prompts from extracted content
+  canvas      Create JSON Canvas templates for critical thinking
+  batch       Batch process multiple PDFs
+  verify      Verify output quality and consistency
+  guide       Show workflow guide and documentation
+  help        Show this help message
+
+Examples:
+  phd-deepread setup
+  phd-deepread extract paper.pdf -o markdown_output/
+  phd-deepread generate markdown_output/paper/
+  phd-deepread canvas --title "Paper Title" --authors "Author" --year "2024"
+  phd-deepread batch papers/ -o literature_notes/
+  phd-deepread guide
+
+For command-specific help: phd-deepread <command> --help
+EOF
+}
+
+# Check if command is provided
+if [[ $# -eq 0 ]]; then
+    print_header
+    print_usage
+    exit 0
+fi
+
+COMMAND="$1"
+shift
+
+# Setup environment for all commands except help/guide
+if [[ "$COMMAND" != "help" && "$COMMAND" != "--help" && "$COMMAND" != "-h" && "$COMMAND" != "guide" && "$COMMAND" != "docs" && "$COMMAND" != "documentation" ]]; then
+    setup_environment
+fi
+
+case "$COMMAND" in
+    setup)
+        print_header
+        "$SCRIPT_DIR/setup.sh" "$@"
+        ;;
+    extract)
+        python "$SCRIPT_DIR/extract.py" "$@"
+        ;;
+    generate)
+        python "$SCRIPT_DIR/generate.py" "$@"
+        ;;
+    canvas)
+        python "$SCRIPT_DIR/canvas.py" "$@"
+        ;;
+    batch)
+        "$SCRIPT_DIR/batch.sh" "$@"
+        ;;
+    verify)
+        python "$SCRIPT_DIR/verify.py" "$@"
+        ;;
+    guide|docs|documentation)
+        print_header
+        if [[ -f "$PROJECT_DIR/docs/workflow-guide.md" ]]; then
+            cat "$PROJECT_DIR/docs/workflow-guide.md"
+        else
+            echo -e "${RED}Workflow guide not found${NC}"
+            echo "Check docs/workflow-guide.md"
+        fi
+        ;;
+    help|--help|-h)
+        print_header
+        print_usage
+        ;;
+    *)
+        echo -e "${RED}Unknown command: $COMMAND${NC}"
+        echo
+        print_usage
+        exit 1
+        ;;
+esac

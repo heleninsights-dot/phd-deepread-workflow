@@ -1,0 +1,166 @@
+{
+  "nodes": [
+    {
+      "id": "core-argument",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 400,
+      "height": 200,
+      "text": "# Core Argument\n\n**Primary Claim:** \n\n**Logical Chain:** \n\n**Key Evidence:** ",
+      "color": "1"
+    },
+    {
+      "id": "assumptions",
+      "type": "text",
+      "x": 450,
+      "y": 0,
+      "width": 350,
+      "height": 250,
+      "text": "# Assumptions\n\n**Explicit Assumptions:** \n\n**Implicit Assumptions:** \n\n**Questionable Assumptions:** ",
+      "color": "2"
+    },
+    {
+      "id": "evidence-assessment",
+      "type": "text",
+      "x": 850,
+      "y": 0,
+      "width": 350,
+      "height": 250,
+      "text": "# Evidence Assessment\n\n**Strength of Evidence:** \n\n**Limitations:** \n\n**Alternative Interpretations:** ",
+      "color": "3"
+    },
+    {
+      "id": "alternative-explanations",
+      "type": "text",
+      "x": 0,
+      "y": 250,
+      "width": 400,
+      "height": 200,
+      "text": "# Alternative Explanations\n\n**Competing Hypotheses:** \n\n**Plausibility Assessment:** \n\n**Evidence For/Against:** ",
+      "color": "4"
+    },
+    {
+      "id": "methodological-critique",
+      "type": "text",
+      "x": 450,
+      "y": 300,
+      "width": 350,
+      "height": 200,
+      "text": "# Methodological Critique\n\n**Study Design Limitations:** \n\n**Statistical Issues:** \n\n**Bias and Confounding:** ",
+      "color": "5"
+    },
+    {
+      "id": "personal-relevance",
+      "type": "text",
+      "x": 850,
+      "y": 300,
+      "width": 350,
+      "height": 200,
+      "text": "# Personal Relevance\n\n**Connections to My Research:** \n\n**Potential Applications:** \n\n**Action Items:** ",
+      "color": "6"
+    },
+    {
+      "id": "future-directions",
+      "type": "text",
+      "x": 0,
+      "y": 500,
+      "width": 400,
+      "height": 200,
+      "text": "# Future Directions\n\n**Research Questions Generated:** \n\n**Follow-up Experiments:** \n\n**Long-term Implications:** ",
+      "color": "7"
+    },
+    {
+      "id": "critical-questions-enhanced",
+      "type": "text",
+      "x": 450,
+      "y": 550,
+      "width": 350,
+      "height": 200,
+      "text": "# Critical Questions Enhanced\n\n**Hypothesis Testing Questions:** \n\n**Methodological Questions:** \n\n**Theoretical Questions:** ",
+      "color": "8"
+    },
+    {
+      "id": "hypothesis-center",
+      "type": "text",
+      "x": 850,
+      "y": 550,
+      "width": 350,
+      "height": 200,
+      "text": "# Hypothesis Center\n\n**Hypothesis Re-evaluation:** \n\n**Updated Understanding:** \n\n**Remaining Uncertainties:** ",
+      "color": "9"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge-1",
+      "fromNode": "core-argument",
+      "fromSide": "right",
+      "toNode": "assumptions",
+      "toSide": "left"
+    },
+    {
+      "id": "edge-2",
+      "fromNode": "core-argument",
+      "fromSide": "right",
+      "toNode": "evidence-assessment",
+      "toSide": "left"
+    },
+    {
+      "id": "edge-3",
+      "fromNode": "assumptions",
+      "fromSide": "bottom",
+      "toNode": "alternative-explanations",
+      "toSide": "top"
+    },
+    {
+      "id": "edge-4",
+      "fromNode": "evidence-assessment",
+      "fromSide": "bottom",
+      "toNode": "alternative-explanations",
+      "toSide": "top"
+    },
+    {
+      "id": "edge-5",
+      "fromNode": "alternative-explanations",
+      "fromSide": "bottom",
+      "toNode": "methodological-critique",
+      "toSide": "top"
+    },
+    {
+      "id": "edge-6",
+      "fromNode": "methodological-critique",
+      "fromSide": "right",
+      "toNode": "personal-relevance",
+      "toSide": "left"
+    },
+    {
+      "id": "edge-7",
+      "fromNode": "personal-relevance",
+      "fromSide": "bottom",
+      "toNode": "future-directions",
+      "toSide": "top"
+    },
+    {
+      "id": "edge-8",
+      "fromNode": "future-directions",
+      "fromSide": "right",
+      "toNode": "critical-questions-enhanced",
+      "toSide": "left"
+    },
+    {
+      "id": "edge-9",
+      "fromNode": "critical-questions-enhanced",
+      "fromSide": "right",
+      "toNode": "hypothesis-center",
+      "toSide": "left"
+    },
+    {
+      "id": "edge-10",
+      "fromNode": "hypothesis-center",
+      "fromSide": "top",
+      "toNode": "core-argument",
+      "toSide": "bottom"
+    }
+  ]
+}

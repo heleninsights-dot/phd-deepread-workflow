@@ -1,0 +1,15 @@
+include LICENSE
+include README.md
+include requirements.txt
+include requirements-dev.txt
+include install.sh
+include Makefile
+include pyproject.toml
+include .gitignore
+include .pre-commit-config.yaml
+include config/*.yaml
+include templates/*
+include docs/*.md
+include examples/*
+recursive-include scripts *.py *.sh
+recursive-include tests *.py
