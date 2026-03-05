@@ -1,0 +1,24 @@
+name: Publish Python distributions to PyPI
+on:
+  push:
+    branches:
+      - main  # This will trigger the upload whenever you push to the main branch
+
+jobs:
+  build-n-publish:
+    name: Build and publish Python distributions to PyPI
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # This is the "magic key" for Trusted Publishing
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+    - name: Install build dependencies
+      run: python3 -m pip install build --user
+    - name: Build a binary wheel and a source tarball
+      run: python3 -m build
+    - name: Publish distribution 📦 to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
