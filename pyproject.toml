@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phd-deepread-workflow"
-version = "0.1.0"
+version = "0.1.1"
 description = "Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian"
 readme = "README.md"
 authors = [
@@ -22,7 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 keywords = ["pdf", "academic", "obsidian", "literature-review", "research", "workflow"]
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
     "PyMuPDF>=1.24.0",
     "pytesseract>=0.3.10",
