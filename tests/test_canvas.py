@@ -138,7 +138,7 @@ class TestCriticalThinkingCanvasStructure:
     def test_default_template_exists(self):
         """Test that the default template exists."""
         # Check if there's a default template in templates directory
-        template_path = Path(__file__).parent.parent / "templates" / "critical-thinking.canvas"
+        template_path = Path(__file__).parent.parent / "scripts" / "templates" / "critical-thinking.canvas"
         if template_path.exists():
             template_content = json.loads(template_path.read_text())
             assert "nodes" in template_content
