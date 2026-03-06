@@ -5,7 +5,7 @@ Thank you for your interest in contributing to the PhD Deep Read Workflow! This 
 ## 🎯 How to Contribute
 
 ### Reporting Bugs
-- Check if the bug has already been reported in [Issues](https://github.com/Helen-insights/phd-deepread-workflow/issues)
+- Check if the bug has already been reported in [Issues](https://github.com/heleninsights-dot/phd-deepread-workflow/issues)
 - If not, create a new issue with:
   - A clear, descriptive title
   - Steps to reproduce the bug
@@ -40,7 +40,7 @@ Thank you for your interest in contributing to the PhD Deep Read Workflow! This 
 ### Setup Steps
 ```bash
 # Clone your fork
-git clone https://github.com/Helen-insights/phd-deepread-workflow.git
+git clone https://github.com/heleninsights-dot/phd-deepread-workflow.git
 cd phd-deepread-workflow
 
 # Create virtual environment

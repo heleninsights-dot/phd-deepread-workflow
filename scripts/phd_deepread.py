@@ -23,6 +23,7 @@ def main():
         "extract": "extract.py",
         "generate": "generate.py",
         "canvas": "canvas.py",
+"run": "process.py",
         "batch": "batch.sh",
         "verify": "verify.py",
         "guide": "show_guide",
@@ -91,6 +92,7 @@ Commands:
   extract     Extract text/images from PDFs (Text-First decision tree: PyMuPDF + Tesseract OCR)
   generate    Generate structured note prompts from extracted content
   canvas      Create JSON Canvas templates for critical thinking
+  run         Run full workflow automation (extract → generate → canvas)
   batch       Batch process multiple PDFs
   verify      Verify output quality and consistency
   guide       Show workflow guide and documentation
@@ -101,13 +103,13 @@ Examples:
   phd-deepread extract paper.pdf -o markdown_output/
   phd-deepread generate markdown_output/paper/
   phd-deepread canvas --title "Paper Title" --authors "Author" --year "2024"
+  phd-deepread run paper.pdf
   phd-deepread batch papers/ -o literature_notes/
   phd-deepread guide
 
 For command-specific help: phd-deepread <command> --help
 """
     print(help_text.strip())
-
 def show_guide():
     """Show workflow guide."""
     guide_path = Path(__file__).parent.parent / "docs" / "workflow-guide.md"

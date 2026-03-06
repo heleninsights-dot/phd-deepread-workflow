@@ -385,7 +385,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ```bash
 # Clone and install development dependencies
-git clone https://github.com/Heleninsights-dot/phd-deepread-workflow.git
+git clone https://github.com/heleninsights-dot/phd-deepread-workflow.git
 cd phd-deepread-workflow
 pip install -r requirements-dev.txt
 pre-commit install  # Install git hooks

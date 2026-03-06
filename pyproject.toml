@@ -43,9 +43,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Helen-insights/phd-deepread-workflow"
-Repository = "https://github.com/Helen-insights/phd-deepread-workflow.git"
-Issues = "https://github.com/Helen-insights/phd-deepread-workflow/issues"
+Homepage = "https://github.com/heleninsights-dot/phd-deepread-workflow"
+Repository = "https://github.com/heleninsights-dot/phd-deepread-workflow.git"
+Issues = "https://github.com/heleninsights-dot/phd-deepread-workflow/issues"
 
 [project.scripts]
 phd-deepread = "scripts.phd_deepread:main"
