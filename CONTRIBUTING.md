@@ -94,7 +94,7 @@ phd-deepread-workflow/
 │   ├── setup.sh      # Environment setup
 │   └── batch.sh      # Batch processing
 ├── templates/        # Template files
-│   └── .clauderules  # Literature note template
+│   └── clauderules.md  # Literature note template
 ├── docs/            # Documentation
 │   ├── workflow-guide.md
 │   └── decision-tree.md
