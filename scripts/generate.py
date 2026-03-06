@@ -58,24 +58,39 @@ def load_template(template_arg):
     """Load template content and return (content, resolved_path).
 
     template_arg can be a string path or Path object.
-    Uses absolute path logic relative to this script's directory.
+    First tries to load via importlib.resources from scripts.templates package.
+    Falls back to filesystem path relative to script directory.
     """
-    # Get the directory where THIS script is sitting
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    # Look inside its own sub-folder for the template
-    template_path = os.path.join(base_dir, str(template_arg))
+    # Convert to string and normalize path separators
+    template_str = str(template_arg)
 
-    # Convert to Path for convenience
-    path = Path(template_path)
-    if not path.exists():
-        raise RuntimeError(f"Template not found: {template_path}")
+    # Extract filename from potential path (e.g., "templates/clauderules.md" -> "clauderules.md")
+    filename = os.path.basename(template_str)
 
+    # Try to load via importlib.resources first (when package is installed)
     try:
-        with open(path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        return content, str(path.resolve())
-    except Exception as e:
-        raise RuntimeError(f"Failed to read template file {path}: {e}")
+        # Use importlib.resources to read file from scripts.templates package
+        # Note: requires scripts.templates to be a proper package (has __init__.py)
+        template_text = importlib.resources.files("scripts.templates").joinpath(filename).read_text(encoding='utf-8')
+        # For resolved_path, indicate it came from package resources
+        resolved_path = f"package:scripts.templates/{filename}"
+        return template_text, resolved_path
+    except (ImportError, FileNotFoundError, AttributeError) as e:
+        # Fallback to filesystem path relative to script directory
+        # This works when running from source or if resources aren't available
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        template_path = os.path.join(base_dir, template_str)
+
+        path = Path(template_path)
+        if not path.exists():
+            raise RuntimeError(f"Template not found: {template_path} (tried package resource '{filename}' and filesystem)")
+
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            return content, str(path.resolve())
+        except Exception as fs_e:
+            raise RuntimeError(f"Failed to read template file {path}: {fs_e}")
 
 
 def extract_paper_info(metadata_path):
