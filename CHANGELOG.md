@@ -8,29 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Initial release of PhD Deep Read Workflow
-- Text-First PDF extraction decision tree (PyMuPDF + Tesseract OCR)
-- Structured note generation with `.clauderules` template
-- Critical-thinking canvas creation with 9 interconnected nodes
-- Batch processing for multiple PDFs
-- Quality verification and consistency checks
-- Comprehensive documentation and examples
-- Claude Code skill integration
-- Test suite for core functionality
-- Configuration system with YAML config file
-- Installation script and Makefile
+- None
 
 ### Changed
-- None (initial release)
+- None
 
 ### Deprecated
-- None (initial release)
+- None
 
 ### Removed
-- None (initial release)
+- None
 
 ### Fixed
-- None (initial release)
+- None
 
 ## [0.1.6] - 2026-03-06
 

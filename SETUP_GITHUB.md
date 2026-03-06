@@ -51,7 +51,7 @@ git init
 git add .
 
 # Commit initial version
-git commit -m "Initial release: PhD Deep Read Workflow v0.1.0"
+git commit -m "Initial release: PhD Deep Read Workflow v0.1.6"
 ```
 
 ## Step 3: Create GitHub Repository
