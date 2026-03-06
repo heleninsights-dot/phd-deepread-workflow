@@ -132,6 +132,13 @@ phd-deepread generate markdown_output/paper/ --template templates/.clauderules
 phd-deepread canvas markdown_output/paper/ --output structured_notes/
 ```
 
+### Full Automation (Single Command)
+
+```bash
+# Run the complete workflow with one command
+phd-deepread run paper.pdf
+```
+
 ### Batch Process a Directory
 
 ```bash
