@@ -139,15 +139,17 @@ phd-deepread canvas markdown_output/paper/ --output structured_notes/
 phd-deepread run paper.pdf
 ```
 
-### Batch Process a Directory
+### 📂 Batch Process a Directory (The "Power User" Method)
+If you have a folder of PDFs and want to turn them all into Obsidian notes:
 
-```bash
-# Process all PDFs in a directory
-phd-deepread batch papers/ --output literature-notes/
+Type: phd-deepread batch  (with a space).
 
-# Limit to first N pages (for testing)
-phd-deepread batch papers/ --output literature-notes/ --max-pages 3
-```
+Input: Drag your [folder] of PDFs into the terminal.
+
+Output: Type --output and drag your [folder in obsidian] into the terminal.
+
+Press Enter.
+Example: phd-deepread batch [folder] --output [folder in obsidian]
 
 ### Interactive Guide
 
