@@ -32,6 +32,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - None (initial release)
 
+## [0.1.6] - 2026-03-06
+
+### Added
+- None
+
+### Changed
+- Updated template loading to use importlib.resources for reliable package resource access
+- Improved packaging configuration for explicit template inclusion
+
+### Deprecated
+- None
+
+### Removed
+- None
+
+### Fixed
+- Fixed template not found error in installed packages using importlib.resources
+- Added filesystem fallback for source development mode
+- Updated test paths to reflect scripts/templates/ location
+
 ## [0.1.5] - 2026-03-06
 
 ### Added
