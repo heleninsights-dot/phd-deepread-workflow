@@ -32,6 +32,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - None (initial release)
 
+## [0.1.3] - 2026-03-06
+
+### Added
+- None
+
+### Changed
+- None
+
+### Deprecated
+- None
+
+### Removed
+- None
+
+### Fixed
+- Fixed template path resolution in generate command to use importlib.resources for locating `.clauderules` template in installed package
+- Updated canvas.py to also use resource-aware template loading (critical-thinking.canvas)
+
 ## [0.1.2] - 2026-03-06
 
 ### Added

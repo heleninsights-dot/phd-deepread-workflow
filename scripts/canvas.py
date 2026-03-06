@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 from datetime import datetime
+import importlib.resources
 
 def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
     """Create a canvas template with 9 critical-thinking nodes."""
@@ -133,13 +134,58 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
 
     return canvas
 
-def load_existing_template(template_path):
-    """Load an existing canvas template file."""
-    try:
-        with open(template_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception as e:
-        raise RuntimeError(f"Failed to load template: {e}")
+def load_existing_template(template_arg):
+    """Load an existing canvas template file.
+
+    template_arg can be a string path or Path object.
+    Tries the following in order:
+    1. If path exists as file, read it.
+    2. Try to load as resource from package 'scripts' using importlib.resources.
+    3. Try to load as resource from package 'phd_deepread_workflow'.
+    4. Try relative to script directory (for development).
+    5. Try relative to current working directory.
+
+    Returns the loaded JSON data.
+    """
+    # Convert to Path for existence check
+    path = Path(template_arg)
+    if path.exists():
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            raise RuntimeError(f"Failed to load template file {path}: {e}")
+
+    # Try as resource from packages
+    packages_to_try = ["scripts", "phd_deepread_workflow"]
+    for package in packages_to_try:
+        try:
+            # Use importlib.resources to read the resource as text, then parse JSON
+            content = importlib.resources.read_text(package, template_arg)
+            return json.loads(content)
+        except (ModuleNotFoundError, FileNotFoundError, ValueError, TypeError, json.JSONDecodeError):
+            continue
+
+    # Fallback: relative to script directory
+    script_dir = Path(__file__).parent
+    fallback_path = script_dir.parent / template_arg
+    if fallback_path.exists():
+        try:
+            with open(fallback_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            raise RuntimeError(f"Failed to load fallback template {fallback_path}: {e}")
+
+    # Fallback: current working directory
+    cwd_path = Path.cwd() / template_arg
+    if cwd_path.exists():
+        try:
+            with open(cwd_path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            raise RuntimeError(f"Failed to load template from cwd {cwd_path}: {e}")
+
+    raise RuntimeError(f"Canvas template not found: {template_arg}. Tried as file, resource from packages {packages_to_try}, fallback path {fallback_path}, and cwd.")
 
 def generate_citekey(paper_info):
     """Generate a citekey from paper information."""
