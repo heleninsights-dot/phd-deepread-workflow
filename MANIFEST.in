@@ -8,8 +8,8 @@ include pyproject.toml
 include .gitignore
 include .pre-commit-config.yaml
 include config/*.yaml
-include templates/*
-include templates/.*
+include scripts/templates/*
+include scripts/templates/.*
 include docs/*.md
 include examples/*
 recursive-include scripts *.py *.sh

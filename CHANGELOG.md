@@ -32,6 +32,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - None (initial release)
 
+## [0.1.5] - 2026-03-06
+
+### Added
+- None
+
+### Changed
+- Moved templates folder into scripts directory for better path resolution
+- Updated template loading logic to use absolute paths relative to script location
+- Updated README batch process section with human-readable instructions
+
+### Deprecated
+- None
+
+### Removed
+- None
+
+### Fixed
+- Updated packaging configuration (MANIFEST.in, pyproject.toml) to include scripts/templates/
+
 ## [0.1.4] - 2026-03-06
 
 ### Added

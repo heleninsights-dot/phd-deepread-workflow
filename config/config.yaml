@@ -30,8 +30,8 @@ extraction:
 # Note Generation Settings
 generation:
   # Template paths
-  clauderules_template: "./templates/clauderules.md"
-  canvas_template: "./templates/critical-thinking.canvas"
+  clauderules_template: "./scripts/templates/clauderules.md"
+  canvas_template: "./scripts/templates/critical-thinking.canvas"
 
   # Claude Code integration
   claude_model: "claude-3-5-sonnet-20241022"  # Default model for note generation
