@@ -19,7 +19,7 @@ This document describes how to publish and distribute the PhD Deep Read Workflow
 # Initialize git (if not already)
 git init
 git add .
-git commit -m "Initial release: PhD Deep Read Workflow v0.1.0"
+git commit -m "Initial release: PhD Deep Read Workflow v0.1.6"
 
 # Add remote repository
 git remote add origin https://github.com/heleninsights-dot/phd-deepread-workflow.git
@@ -75,21 +75,21 @@ twine upload dist/*
 
 1. Update version in `pyproject.toml`:
 ```toml
-version = "0.1.0"
+version = "0.1.6"
 ```
 
 2. Update `CHANGELOG.md` with new version section
 
 3. Create a git tag:
 ```bash
-git tag -a v0.1.0 -m "Release v0.1.0"
-git push origin v0.1.0
+git tag -a v0.1.6 -m "Release v0.1.6"
+git push origin v0.1.6
 ```
 
 4. Create a GitHub Release:
    - Go to Repository → Releases → Draft New Release
-   - Tag: `v0.1.0`
-   - Title: "PhD Deep Read Workflow v0.1.0"
+   - Tag: `v0.1.6`
+   - Title: "PhD Deep Read Workflow v0.1.6"
    - Description: Copy from CHANGELOG.md
    - Upload `dist/*` files as assets
 
@@ -117,11 +117,11 @@ Consider creating a dedicated skill repository or submitting to Claude Code skil
 docker build -t heleninsights-dot/phd-deepread-workflow:latest .
 
 # Tag for version
-docker tag heleninsights-dot/phd-deepread-workflow:latest heleninsights-dot/phd-deepread-workflow:v0.1.0
+docker tag heleninsights-dot/phd-deepread-workflow:latest heleninsights-dot/phd-deepread-workflow:v0.1.6
 
 # Push to Docker Hub
 docker push heleninsights-dot/phd-deepread-workflow:latest
-docker push heleninsights-dot/phd-deepread-workflow:v0.1.0
+docker push heleninsights-dot/phd-deepread-workflow:v0.1.6
 ```
 
 ### Update docker-compose.yml
