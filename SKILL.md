@@ -31,6 +31,7 @@ The skill provides these main commands:
 - `extract`: Extract text and images from PDFs using Text-First decision tree (PyMuPDF + Tesseract OCR)
 - `generate`: Generate structured literature notes using .clauderules template
 - `canvas`: Create JSON Canvas files for critical thinking with 9 interconnected nodes
+- `run`: Run full workflow automation (extract → generate → canvas)
 - `verify`: Verify output quality and consistency with existing corpus patterns
 - `batch`: Batch process directory of PDFs through all stages
 - `guide`: Show interactive workflow guide with decision-tree visualization
@@ -45,6 +46,9 @@ phd-deepread setup
 phd-deepread extract paper.pdf --output markdown_output/
 phd-deepread generate markdown_output/paper/ --template templates/.clauderules
 phd-deepread canvas markdown_output/paper/ --output structured_notes/
+
+# Run full workflow automation
+phd-deepread run paper.pdf
 
 # Batch process directory
 phd-deepread batch papers/ --output literature-notes/

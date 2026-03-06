@@ -22,7 +22,7 @@ git add .
 git commit -m "Initial release: PhD Deep Read Workflow v0.1.0"
 
 # Add remote repository
-git remote add origin https://github.com/Helen-insights/phd-deepread-workflow.git
+git remote add origin https://github.com/heleninsights-dot/phd-deepread-workflow.git
 git branch -M main
 git push -u origin main
 ```
@@ -100,7 +100,7 @@ git push origin v0.1.0
 Users can install directly from GitHub:
 
 ```bash
-git clone https://github.com/Helen-insights/phd-deepread-workflow.git
+git clone https://github.com/heleninsights-dot/phd-deepread-workflow.git
 cp -r phd-deepread-workflow ~/.claude/skills/phd-deepread
 ```
 
@@ -114,21 +114,21 @@ Consider creating a dedicated skill repository or submitting to Claude Code skil
 
 ```bash
 # Build the image
-docker build -t Helen-insights/phd-deepread-workflow:latest .
+docker build -t heleninsights-dot/phd-deepread-workflow:latest .
 
 # Tag for version
-docker tag Helen-insights/phd-deepread-workflow:latest Helen-insights/phd-deepread-workflow:v0.1.0
+docker tag heleninsights-dot/phd-deepread-workflow:latest heleninsights-dot/phd-deepread-workflow:v0.1.0
 
 # Push to Docker Hub
-docker push Helen-insights/phd-deepread-workflow:latest
-docker push Helen-insights/phd-deepread-workflow:v0.1.0
+docker push heleninsights-dot/phd-deepread-workflow:latest
+docker push heleninsights-dot/phd-deepread-workflow:v0.1.0
 ```
 
 ### Update docker-compose.yml
 
 Update image reference in `docker-compose.yml`:
 ```yaml
-image: Helen-insights/phd-deepread-workflow:latest
+image: heleninsights-dot/phd-deepread-workflow:latest
 ```
 
 ## Documentation

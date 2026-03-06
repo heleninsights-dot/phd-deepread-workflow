@@ -32,6 +32,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - None (initial release)
 
+## [0.1.1] - 2026-03-05
+
+### Added
+- New "run" command for full workflow automation (extract → generate → canvas)
+- `process.py` script implementing the automated pipeline
+- GitHub issue and pull request templates
+- Comprehensive GitHub repository setup documentation
+
+### Changed
+- Updated all repository URLs to use consistent GitHub username (`heleninsights-dot`)
+- Fixed version consistency between `pyproject.toml` and `scripts/__init__.py`
+- Enhanced CLI help text to include "run" command
+- Improved installation instructions in README.md
+
+### Deprecated
+- None
+
+### Removed
+- None
+
+### Fixed
+- None
+
 ## [0.1.0] - 2026-03-03
 
 ### Added

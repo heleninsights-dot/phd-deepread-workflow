@@ -9,7 +9,7 @@ Replace all placeholders in the repository with your actual information:
 ### Files to Update:
 
 1. **`README.md`**:
-   - All `yourusername` placeholders have been replaced with `Helen-insights`
+   - All `yourusername` placeholders have been replaced with `heleninsights-dot`
    - All `your-email@example.com` placeholders have been replaced with `heleninsights@gmail.com`
 
 2. **`pyproject.toml`**:
@@ -67,7 +67,7 @@ git commit -m "Initial release: PhD Deep Read Workflow v0.1.0"
 
 ```bash
 # Add remote repository
-git remote add origin https://github.com/Helen-insights/phd-deepread-workflow.git
+git remote add origin https://github.com/heleninsights-dot/phd-deepread-workflow.git
 
 # Rename branch to main
 git branch -M main

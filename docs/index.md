@@ -39,8 +39,8 @@ Welcome to the official documentation for the PhD Deep Read Workflow. This docum
 
 ## Need Help?
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/Helen-insights/phd-deepread-workflow/issues)
-- **GitHub Discussions**: [Ask questions and share ideas](https://github.com/Helen-insights/phd-deepread-workflow/discussions)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/heleninsights-dot/phd-deepread-workflow/issues)
+- **GitHub Discussions**: [Ask questions and share ideas](https://github.com/heleninsights-dot/phd-deepread-workflow/discussions)
 - **Email**: [heleninsights@gmail.com](mailto:heleninsights@gmail.com)
 
 ## License
