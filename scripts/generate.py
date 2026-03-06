@@ -15,6 +15,9 @@ import json
 import sys
 from pathlib import Path
 import re
+import importlib.resources
+
+
 
 def find_extracted_files(extraction_dir):
     """Find markdown and metadata files in extraction directory."""
@@ -49,6 +52,60 @@ def read_template(template_path):
             return f.read()
     except Exception as e:
         raise RuntimeError(f"Failed to read template: {e}")
+
+def load_template(template_arg):
+    """Load template content and return (content, resolved_path).
+
+    template_arg can be a string path or Path object.
+    Tries the following in order:
+    1. If path exists as file, read it.
+    2. Try to load as resource from package 'scripts' using importlib.resources.
+    3. Try to load as resource from package 'phd_deepread_workflow'.
+    4. Try relative to script directory (for development).
+    5. Try relative to current working directory.
+
+    Returns a tuple (template_content, resolved_path_string).
+    """
+    # Convert to Path for existence check
+    path = Path(template_arg)
+    if path.exists():
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return f.read(), str(path.resolve())
+        except Exception as e:
+            raise RuntimeError(f"Failed to read template file {path}: {e}")
+
+    # Try as resource from packages
+    packages_to_try = ["scripts", "phd_deepread_workflow"]
+    for package in packages_to_try:
+        try:
+            content = importlib.resources.read_text(package, template_arg)
+            # If successful, return content with resource identifier
+            return content, f"resource:{package}/{template_arg}"
+        except (ModuleNotFoundError, FileNotFoundError, ValueError, TypeError):
+            continue
+
+    # Fallback: relative to script directory
+    script_dir = Path(__file__).parent
+    fallback_path = script_dir.parent / template_arg
+    if fallback_path.exists():
+        try:
+            with open(fallback_path, 'r', encoding='utf-8') as f:
+                return f.read(), str(fallback_path.resolve())
+        except Exception as e:
+            raise RuntimeError(f"Failed to read fallback template {fallback_path}: {e}")
+
+    # Fallback: current working directory
+    cwd_path = Path.cwd() / template_arg
+    if cwd_path.exists():
+        try:
+            with open(cwd_path, 'r', encoding='utf-8') as f:
+                return f.read(), str(cwd_path.resolve())
+        except Exception as e:
+            raise RuntimeError(f"Failed to read template from cwd {cwd_path}: {e}")
+
+    raise RuntimeError(f"Template not found: {template_arg}. Tried as file, resource from packages {packages_to_try}, fallback path {fallback_path}, and cwd.")
+
 
 def extract_paper_info(metadata_path):
     """Extract paper information from metadata JSON."""
@@ -194,15 +251,9 @@ def main():
             print("❌ No markdown file found")
             return 1
 
-        # Read template
-        template_path = Path(args.template)
-        if not template_path.exists():
-            # Try relative to script directory
-            script_dir = Path(__file__).parent
-            template_path = script_dir.parent / "templates" / ".clauderules"
-
-        template = read_template(template_path)
-        print(f"📋 Template loaded: {template_path}")
+        # Load template using resource-aware loader
+        template, template_source = load_template(args.template)
+        print(f"📋 Template loaded: {template_source}")
         print()
 
         # Extract paper info
