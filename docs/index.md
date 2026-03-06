@@ -24,7 +24,7 @@ Welcome to the official documentation for the PhD Deep Read Workflow. This docum
 ### Technical Reference
 - [Command Line Interface](../../README.md#detailed-usage) - All commands and options
 - [Configuration Files](../../config/config.yaml) - Configuration options
-- [Template System](../../templates/clauderules.md) - Customizing note templates
+- [Template System](../../scripts/templates/clauderules.md) - Customizing note templates
 - [API Reference](../../scripts/) - Script documentation
 
 ### Development

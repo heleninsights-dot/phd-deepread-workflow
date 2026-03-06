@@ -190,7 +190,7 @@ def main():
     )
     parser.add_argument("extraction_dir", help="Directory containing extracted PDF content (from marker)")
     parser.add_argument("-t", "--template", default="templates/clauderules.md",
-                       help="Path to .clauderules template (default: templates/clauderules.md)")
+                       help="Path to .clauderules template relative to script directory (default: templates/clauderules.md)")
     parser.add_argument("-o", "--output", help="Output file for generated prompt (default: print to stdout)")
     parser.add_argument("--skeleton", action="store_true",
                        help="Generate a skeleton note with placeholders instead of a full prompt")

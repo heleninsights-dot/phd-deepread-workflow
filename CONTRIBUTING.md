@@ -92,9 +92,10 @@ phd-deepread-workflow/
 │   ├── canvas.py     # JSON Canvas creation
 │   ├── verify.py     # Quality verification
 │   ├── setup.sh      # Environment setup
-│   └── batch.sh      # Batch processing
-├── templates/        # Template files
-│   └── clauderules.md  # Literature note template
+│   ├── batch.sh      # Batch processing
+│   └── templates/        # Template files
+│       ├── clauderules.md  # Literature note template
+│       └── critical-thinking.canvas  # Canvas template
 ├── docs/            # Documentation
 │   ├── workflow-guide.md
 │   └── decision-tree.md

@@ -11,7 +11,7 @@ scripts/ @your-github-username
 config/ @your-github-username
 
 # Templates
-templates/ @your-github-username
+scripts/templates/ @your-github-username
 
 # Tests
 tests/ @your-github-username

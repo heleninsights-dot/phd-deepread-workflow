@@ -135,7 +135,7 @@ phd-deepread setup
 
 # Single PDF processing
 phd-deepread extract paper.pdf --output markdown_output/
-phd-deepread generate markdown_output/paper/ --template templates/clauderules.md
+phd-deepread generate markdown_output/paper/ --template scripts/templates/clauderules.md
 phd-deepread canvas markdown_output/paper/ --output structured_notes/
 
 # Batch processing
@@ -194,7 +194,7 @@ source .venv/bin/activate
 ## Advanced Usage
 
 ### Custom Templates
-- Modify `templates/clauderules.md` for different academic fields
+- Modify `scripts/templates/clauderules.md` for different academic fields
 - Create custom canvas templates with different node structures
 - Adjust extraction parameters for specific PDF types
 

@@ -126,7 +126,7 @@ See [Dockerfile](Dockerfile) and [docker-compose.yml](docker-compose.yml) for ad
 phd-deepread extract paper.pdf --output markdown_output/
 
 # 2. Generate structured literature note (requires Claude Code)
-phd-deepread generate markdown_output/paper/ --template templates/clauderules.md
+phd-deepread generate markdown_output/paper/ --template scripts/templates/clauderules.md
 
 # 3. Create critical-thinking canvas
 phd-deepread canvas markdown_output/paper/ --output structured_notes/
@@ -188,7 +188,7 @@ Uses Claude Code with the `.clauderules` template:
 
 ```bash
 phd-deepread generate markdown_output/paper/ \
-  --template templates/clauderules.md \
+  --template scripts/templates/clauderules.md \
   --output structured_notes/ \
   --skeleton              # Generate placeholder note without Claude
 ```
@@ -206,7 +206,7 @@ Creates 9-node JSON Canvas for deep analysis:
 ```bash
 phd-deepread canvas markdown_output/paper/ \
   --output structured_notes/ \
-  --template templates/critical-thinking.canvas
+  --template scripts/templates/critical-thinking.canvas
 ```
 
 **Canvas Nodes:**
@@ -232,7 +232,7 @@ phd-deepread verify --all literature-notes/
 
 ### Custom Templates
 
-Modify `templates/clauderules.md` for different academic fields:
+Modify `scripts/templates/clauderules.md` for different academic fields:
 
 ```yaml
 category: literaturenote
