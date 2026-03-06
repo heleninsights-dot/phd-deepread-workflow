@@ -118,7 +118,7 @@ echo "📁 Checking directory structure..."
 echo "📁 Checking repository structure..."
 
 # Check for template files
-if [[ -f "templates/.clauderules" ]]; then
+if [[ -f "templates/clauderules.md" ]]; then
     echo -e "${GREEN}✓${NC} .clauderules template found"
 else
     echo -e "${RED}✗${NC} .clauderules template not found in templates/"

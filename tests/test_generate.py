@@ -155,12 +155,12 @@ class TestTemplateStructure:
 
     def test_template_exists(self):
         """Test that the template file exists."""
-        template_path = Path(__file__).parent.parent / "templates" / ".clauderules"
+        template_path = Path(__file__).parent.parent / "templates" / "clauderules.md"
         assert template_path.exists(), f"Template not found at {template_path}"
 
     def test_template_structure(self):
         """Test that template has required sections."""
-        template_path = Path(__file__).parent.parent / "templates" / ".clauderules"
+        template_path = Path(__file__).parent.parent / "templates" / "clauderules.md"
         template_content = template_path.read_text()
 
         # Required YAML frontmatter markers

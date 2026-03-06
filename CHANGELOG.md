@@ -32,6 +32,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - None (initial release)
 
+## [0.1.4] - 2026-03-06
+
+### Added
+- None
+
+### Changed
+- None
+
+### Deprecated
+- None
+
+### Removed
+- None
+
+### Fixed
+- Renamed `.clauderules` dotfile to `clauderules.md` to prevent packaging exclusion
+- Updated all Python code, configuration, and tests to reference new template filename
+- Ensured templates folder is explicitly included in package data
+
 ## [0.1.3] - 2026-03-06
 
 ### Added

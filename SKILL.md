@@ -44,7 +44,7 @@ phd-deepread setup
 
 # Process a single PDF
 phd-deepread extract paper.pdf --output markdown_output/
-phd-deepread generate markdown_output/paper/ --template templates/.clauderules
+phd-deepread generate markdown_output/paper/ --template templates/clauderules.md
 phd-deepread canvas markdown_output/paper/ --output structured_notes/
 
 # Run full workflow automation
