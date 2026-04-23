@@ -1,136 +1,101 @@
 ---
 name: phd-deepread
-description: Guided workflow for processing academic PDFs into structured literature notes using Text-First decision tree (PyMuPDF + Tesseract OCR) and Claude-assisted analysis. Perfect for literature review and note-taking in Obsidian.
-tags: [pdf, academic, research, obsidian, workflow]
-allowed-tools: [Bash, Write, Read, Edit, Glob, Grep, Skill]
+description: "Extracts text and figures from research papers, journal articles, and academic PDFs using PyMuPDF with Tesseract OCR fallback, generates structured Obsidian literature notes with YAML frontmatter and Dataview callouts, and creates 9-node JSON Canvas files for critical analysis. Use when the user wants to process academic PDFs into reading notes, summarize research papers, create literature review notes, extract citations and key findings, or batch-process a collection of papers for an Obsidian vault."
+allowed-tools: "Bash, Write, Read, Edit, Glob, Grep, Skill"
 ---
 
 # PhD Deep Read Workflow
 
-This skill implements a sophisticated **PhD Deep Read Workflow** that processes academic PDFs into structured literature notes for Obsidian using a hybrid decision-tree approach. The workflow combines:
-
-1. **Text-First PDF Extraction**: Decision-tree using PyMuPDF (fast text extraction) for searchable PDFs and Tesseract OCR fallback for scanned/complex pages
-2. **Structured Note Generation**: Template-driven generation of comprehensive academic literature notes
-3. **Critical Thinking Canvas**: JSON Canvas files with 9 interconnected nodes for deep critical analysis
-4. **Workflow Automation**: Scripts to automate the 4-stage pipeline
-
-## When to Use This Skill
-
-Activate when the user:
-- Wants to process academic PDFs into structured literature notes
-- Needs to extract text from PDFs with complex layouts or tables
-- Wants to generate Obsidian-compatible notes with YAML frontmatter and Dataview callouts
-- Needs critical thinking canvases for deep analysis of papers
-- Has a collection of PDFs to process in batch
+Four-stage pipeline: extract text from academic PDFs → generate structured literature notes → create critical-thinking canvases → verify output quality.
 
 ## Commands
 
-The skill provides these main commands:
+### setup
 
-- `setup`: Setup environment and install required tools (PyMuPDF, Tesseract OCR)
-- `extract`: Extract text and images from PDFs using Text-First decision tree (PyMuPDF + Tesseract OCR)
-- `generate`: Generate structured literature notes using .clauderules template
-- `canvas`: Create JSON Canvas files for critical thinking with 9 interconnected nodes
-- `run`: Run full workflow automation (extract → generate → canvas)
-- `verify`: Verify output quality and consistency with existing corpus patterns
-- `batch`: Batch process directory of PDFs through all stages
-- `guide`: Show interactive workflow guide with decision-tree visualization
-
-## Usage Examples
+Install and verify dependencies (PyMuPDF, Tesseract OCR, Python 3.10+):
 
 ```bash
-# Setup environment
-phd-deepread setup
-
-# Process a single PDF
-phd-deepread extract paper.pdf --output markdown_output/
-phd-deepread generate markdown_output/paper/ --template scripts/templates/clauderules.md
-phd-deepread canvas markdown_output/paper/ --output structured_notes/
-
-# Run full workflow automation
-phd-deepread run paper.pdf
-
-# Batch process directory
-phd-deepread batch papers/ --output literature-notes/
-
-# Show workflow guide
-phd-deepread guide
+python scripts/phd_deepread.py setup
 ```
 
-## Workflow Stages
+**Validation**: Confirm `import fitz` succeeds and `tesseract --version` returns a version string.
 
-### Stage 1: Text-First PDF Extraction
-Text-First decision tree that pre-scans PDF with PyMuPDF, uses direct text extraction for searchable pages (80%+ of academic PDFs), falls back to Tesseract OCR only for scanned/complex pages. Outputs raw markdown with embedded images and metadata JSON.
+### extract
 
-### Stage 2: Structured Note Generation
-Uses the `.clauderules` template with Claude Code assistance to generate comprehensive literature notes with:
-- YAML frontmatter with specific fields
-- Dataview-compatible callouts (`> [!Synthesis]`, `> [!Metadata]`)
-- Academic critical analysis sections
-- Extensive [[Wikilinks]] for concepts, methods, proteins
-- Personal relevance and action items
-
-### Stage 3: Critical-Thinking Canvas
-Creates JSON Canvas files with 9 interconnected nodes for deep critical analysis:
-- core-argument, assumptions, evidence-assessment
-- alternative-explanations, methodological-critique
-- personal-relevance, future-directions
-- critical-questions-enhanced, hypothesis-center
-
-### Stage 4: Verification
-Quality checks and pattern matching to ensure consistency with existing corpus.
-
-## External Tools Required
-
-The workflow depends on these external tools:
-
-1. **PyMuPDF (fitz)**: Fast text extraction for searchable PDFs (primary method)
-2. **Tesseract OCR**: Optical character recognition for scanned/complex pages (optional fallback)
-3. **Python 3.10+**: Virtual environment for running the tools
-4. **Claude Code**: Template-driven structured note generation
-5. **Custom Python scripts**: Implement Text-First decision tree and workflow automation
-
-## Quick Start
-
-1. **Install the skill** (already done if you see this)
-2. **Run setup**: `phd-deepread setup` to check/install dependencies
-3. **Test with a PDF**: `phd-deepread extract sample.pdf`
-4. **Generate notes**: `phd-deepread generate markdown_output/sample/`
-5. **Create canvas**: `phd-deepread canvas markdown_output/sample/`
-
-## Troubleshooting
-
-### Common Issues
-
-**Tesseract OCR not installed**: Install with `brew install tesseract` (macOS) or `sudo apt install tesseract-ocr` (Linux)
-**PyMuPDF missing**: Install with `pip install PyMuPDF`
-**Missing images**: Check `--disable_image_extraction` not set
-**OCR pages not processed**: Ensure Tesseract is installed and accessible
-**Virtual environment activation**: Ensure you activate the correct Python environment
-
-### Environment Variables
+Extract text and images from a PDF using the Text-First decision tree. Pre-scans each page with PyMuPDF — pages with ≥100 searchable characters use direct text extraction; others fall back to Tesseract OCR. See [decision-tree.md](docs/decision-tree.md) for the full algorithm.
 
 ```bash
-# Legacy: Disable SDPA for compatibility (no longer required for Tesseract)
-export ENABLE_EFFICIENT_ATTENTION=0
-
-# Activate Python virtual environment
-source .venv/bin/activate
+python scripts/phd_deepread.py extract paper.pdf --output markdown_output/
 ```
 
-## Related Skills
+**Output**: `markdown_output/[PDF_NAME]/` containing `.md`, `_meta.json`, `blocks.json`, and extracted images.
 
-- [json-canvas](/json-canvas): Create and edit JSON Canvas files
-- [obsidian-markdown](/obsidian-markdown): Work with Obsidian Flavored Markdown
-- [obsidian-bases](/obsidian-bases): Create Obsidian Bases with views and filters
+**Validation**: Check `_meta.json` — every page should have `text_extraction_method` set to `pdftext` or `tesseract` and `block_counts.characters > 0`.
 
-## References
+### generate
 
-- Original workflow documentation in `Demo_PhDDeepRead/`
-- Decision-tree architecture visualization: `PhD DeepRead_V2.html`
-- Workflow demonstration: `2020-Yang_Workflow_Demo_Memo.md`
-- Step-by-step instructions: `plan mode.md`
+Generate a structured literature note using the clauderules template at `scripts/templates/clauderules.md`. Produces YAML frontmatter (`category`, `tags`, `citekey`, `status`, `dateread`), Dataview callouts (`[!Citation]`, `[!Synthesis]`, `[!Metadata]`, `[!Abstract]`), and academic analysis sections with extensive [[Wikilinks]].
 
----
+```bash
+python scripts/phd_deepread.py generate markdown_output/paper/ --template scripts/templates/clauderules.md
+```
 
-**Note**: This skill packages the existing workflow from `Demo_PhDDeepRead` without modifying or including the Python OCR code from `Failed_PhDDeepRead`. It provides guided commands to help users follow the documented hybrid extraction and analysis pipeline.
+**Validation**: Output note must contain valid YAML frontmatter, ≥10 [[Wikilinks]], and all required Dataview callouts.
+
+### canvas
+
+Create a JSON Canvas with 9 interconnected critical-thinking nodes: core-argument, assumptions, evidence-assessment, alternative-explanations, methodological-critique, personal-relevance, future-directions, critical-questions-enhanced, hypothesis-center. See `scripts/templates/critical-thinking.canvas` for the template.
+
+```bash
+python scripts/phd_deepread.py canvas --title "Paper Title" --authors "Author" --year "2024"
+```
+
+**Validation**: Output `.canvas` must be valid JSON with exactly 9 nodes and connecting edges.
+
+### run
+
+Execute the full pipeline (extract → generate → canvas) for a single PDF:
+
+```bash
+python scripts/phd_deepread.py run paper.pdf
+```
+
+### batch
+
+Process a directory of PDFs through all stages:
+
+```bash
+python scripts/phd_deepread.py batch papers/ --output literature-notes/
+```
+
+### verify
+
+Check output quality and consistency against existing corpus patterns:
+
+```bash
+python scripts/phd_deepread.py verify structured_notes/
+```
+
+## Key Configuration
+
+| Parameter | Default | Effect |
+|-----------|---------|--------|
+| `--threshold` | 100 | Min characters to consider a page searchable |
+| `--percentage` | 0.8 | Fraction of searchable pages before skipping OCR entirely |
+| `--lang` | eng | Tesseract OCR language code |
+| `--force-ocr` | false | Force OCR on all pages, bypassing the decision tree |
+
+## Setup Requirements
+
+- **Python 3.10+** with virtual environment (`source .venv/bin/activate`)
+- **PyMuPDF**: `pip install PyMuPDF`
+- **Tesseract OCR** (optional fallback): `brew install tesseract` (macOS) or `sudo apt install tesseract-ocr` (Linux)
+
+## Reference
+
+- [Decision tree architecture](docs/decision-tree.md) — per-page extraction logic and configuration
+- [Full workflow guide](docs/workflow-guide.md) — detailed stage descriptions and time estimates
+- [Example output note](examples/example-output.md)
+- [Example canvas](examples/example-canvas.canvas)
+- [Literature note template](scripts/templates/clauderules.md)
+- [Critical thinking canvas template](scripts/templates/critical-thinking.canvas)
