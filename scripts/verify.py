@@ -10,6 +10,129 @@ import sys
 from pathlib import Path
 import re
 
+# Public constants used by tests and external callers
+REQUIRED_EXTRACTION_FILES = ["*.md", "*_meta.json"]
+REQUIRED_NOTE_SECTIONS = [
+    "## 🚀 Research Gap & Hypothesis",
+    "## 🔬 Methodology & Evidence Base",
+    "## 📊 Key Mechanisms & Findings",
+    "## 🎯 Critical Analysis",
+    "## 🔗 Connections & Integration",
+    "## 📋 Action Items & Next Steps",
+    "## 🏁 Summary & Conclusion",
+]
+REQUIRED_CANVAS_FIELDS = ["id", "type", "text", "x", "y", "width", "height"]
+
+
+def verify_extraction(extract_dir):
+    """Verify an extraction directory. Returns a result dict."""
+    extract_path = Path(extract_dir)
+    errors = []
+    result = {"valid": False, "errors": errors}
+
+    if not extract_path.exists():
+        errors.append(f"Directory not found: {extract_dir}")
+        return result
+
+    md_files = [f for f in extract_path.glob("*.md")
+                if not f.name.endswith("_formatted.md") and not f.name.endswith(".backup.md")]
+    meta_files = list(extract_path.glob("*_meta.json"))
+
+    if not md_files:
+        errors.append("No markdown file found")
+    else:
+        result["markdown_file"] = md_files[0].name
+
+    if not meta_files:
+        errors.append("No metadata JSON found")
+    else:
+        try:
+            with open(meta_files[0], "r", encoding="utf-8") as f:
+                json.load(f)
+            result["metadata_file"] = meta_files[0].name
+        except json.JSONDecodeError as e:
+            errors.append(f"Invalid metadata JSON: {e}")
+
+    result["valid"] = len(errors) == 0
+    return result
+
+
+def verify_note(note_path):
+    """Verify a structured literature note. Returns a result dict."""
+    path = Path(note_path)
+    errors = []
+    result = {"valid": False, "errors": errors}
+
+    if not path.exists():
+        errors.append(f"File not found: {note_path}")
+        return result
+
+    try:
+        content = path.read_text(encoding="utf-8")
+    except Exception as e:
+        errors.append(f"Could not read file: {e}")
+        return result
+
+    if not (content.startswith("---\n") and "\n---\n" in content[4:]):
+        errors.append("Missing YAML frontmatter")
+
+    for callout in ("> [!Citation]", "> [!Synthesis]", "> [!Metadata]", "> [!Abstract]"):
+        if callout not in content:
+            errors.append(f"Missing callout: {callout}")
+
+    result["valid"] = len(errors) == 0
+    return result
+
+
+def verify_canvas(canvas_path):
+    """Verify a JSON Canvas file. Returns a result dict."""
+    path = Path(canvas_path)
+    errors = []
+    result = {"valid": False, "errors": errors}
+
+    if not path.exists():
+        errors.append(f"File not found: {canvas_path}")
+        return result
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            canvas = json.load(f)
+    except json.JSONDecodeError as e:
+        errors.append(f"Invalid JSON: {e}")
+        return result
+
+    if "nodes" not in canvas or not isinstance(canvas.get("nodes"), list):
+        errors.append("Missing or invalid 'nodes' array")
+        return result
+
+    for node in canvas["nodes"]:
+        missing = [k for k in ("id", "type", "x", "y", "width", "height") if k not in node]
+        if missing:
+            errors.append(f"Node missing fields: {missing}")
+            break
+
+    result["valid"] = len(errors) == 0
+    return result
+
+
+def verify_all(output_dir):
+    """Verify all outputs found under output_dir. Returns a summary dict."""
+    base = Path(output_dir)
+    summary = {"extractions": [], "notes": [], "canvases": []}
+
+    for extraction_dir in (base / "markdown_output").glob("*") if (base / "markdown_output").exists() else []:
+        if extraction_dir.is_dir():
+            summary["extractions"].append(verify_extraction(str(extraction_dir)))
+
+    for note_file in base.rglob("*.md"):
+        summary["notes"].append(verify_note(str(note_file)))
+
+    for canvas_file in base.rglob("*.canvas"):
+        summary["canvases"].append(verify_canvas(str(canvas_file)))
+
+    return summary
+
+
 def check_extraction_directory(extract_dir):
     """Verify structure and content of extraction directory."""
     print(f"🔍 Checking extraction directory: {extract_dir}")

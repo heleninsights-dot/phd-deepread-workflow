@@ -7,3 +7,6 @@ Pillow>=10.0.0            # Image processing for OCR
 # macOS: brew install tesseract
 # Ubuntu/Debian: sudo apt install tesseract-ocr
 # Windows: https://github.com/UB-Mannheim/tesseract/wiki
+
+# Optional: needed only for --openai flag in generate.py
+# openai>=1.0.0
