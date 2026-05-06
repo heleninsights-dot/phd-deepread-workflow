@@ -91,8 +91,10 @@ phd-deepread-workflow/
 │   ├── generate.py   # Structured note generation
 │   ├── canvas.py     # JSON Canvas creation
 │   ├── verify.py     # Quality verification
-│   ├── setup.sh      # Environment setup
-│   ├── batch.sh      # Batch processing
+│   ├── doctor.py     # Dependency / first-run check
+│   ├── batch.py      # Batch processing
+│   ├── process.py    # Full pipeline (run command)
+│   ├── phd_deepread.py  # CLI dispatcher
 │   └── templates/        # Template files
 │       ├── clauderules.md  # Literature note template
 │       └── critical-thinking.canvas  # Canvas template

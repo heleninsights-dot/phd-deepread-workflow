@@ -19,12 +19,13 @@ def main():
 
     # Map commands to scripts
     script_map = {
-        "setup": "setup.sh",
+        "doctor": "doctor.py",
+        "setup": "doctor.py",  # alias for backwards compatibility
         "extract": "extract.py",
         "generate": "generate.py",
         "canvas": "canvas.py",
         "run": "process.py",
-        "batch": "batch.sh",
+        "batch": "batch.py",
         "verify": "verify.py",
         "guide": "show_guide",
         "help": "show_help",
@@ -88,30 +89,22 @@ PhD Deep Read Workflow - Transform academic PDFs into structured literature note
 Usage: phd-deepread <command> [options]
 
 Commands:
-  setup       Check dependencies and environment setup
-  extract     Extract text/images from PDFs (Text-First decision tree: PyMuPDF + Tesseract OCR)
-  generate    Generate literature note — prints prompt, or calls OpenAI directly with --openai
-  canvas      Create JSON Canvas — populate nodes from a note with --from-note [--openai]
-  run         Run full pipeline (extract → generate → canvas), pass --openai to automate all steps
+  doctor      Check dependencies and environment setup (alias: setup)
+  extract     Extract text/images from PDFs (PyMuPDF + Tesseract OCR fallback)
+  generate    Build a literature-note prompt from extracted text — paste into Claude Code
+  canvas      Create a 9-node JSON Canvas; --from-note populates nodes from a finished note
+  run         Run full pipeline: extract → generate prompt → canvas
   batch       Batch process multiple PDFs
   verify      Verify output quality and consistency
   guide       Show workflow guide and documentation
   help        Show this help message
 
-API Key (required for --openai):
-  export OPENAI_API_KEY=sk-...                        # session only
-  echo 'export OPENAI_API_KEY=sk-...' >> ~/.zshrc     # permanent
-
-Non-OpenAI providers (e.g. DeepSeek for China):
-  export OPENAI_API_KEY=<your-key>
-  phd-deepread run paper.pdf --openai --model deepseek-chat --base-url https://api.deepseek.com
-
 Examples:
-  phd-deepread setup
+  phd-deepread doctor
   phd-deepread extract paper.pdf -o markdown_output/
-  phd-deepread generate markdown_output/paper/ --openai -o notes/paper.md
-  phd-deepread canvas -o notes/paper.canvas --from-note notes/paper.md --openai
-  phd-deepread run paper.pdf --openai
+  phd-deepread generate markdown_output/paper/ -o notes/paper.md
+  phd-deepread canvas -o notes/paper.canvas --from-note notes/paper.md
+  phd-deepread run paper.pdf
   phd-deepread batch papers/ -o literature_notes/
   phd-deepread guide
 

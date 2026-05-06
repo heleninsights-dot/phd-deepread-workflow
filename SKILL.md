@@ -1,127 +1,95 @@
 ---
 name: phd-deepread
-description: Guided workflow for processing academic PDFs into structured literature notes using Text-First decision tree (PyMuPDF + Tesseract OCR) and Claude-assisted analysis. Perfect for literature review and note-taking in Obsidian.
-tags: [pdf, academic, research, obsidian, workflow]
-allowed-tools: [Bash, Write, Read, Edit, Glob, Grep, Skill]
+description: Process academic PDFs into structured Obsidian literature notes and 9-node critical-thinking canvases. Activate when the user shares a PDF (drag-in or path) and asks to read, summarize, analyze, or "deeply read" it — or when they say things like "process this paper", "make a literature note", "critique this paper", or "build a canvas for this paper".
+tags: [pdf, academic, research, obsidian, literature-review]
+allowed-tools: [Bash, Write, Read, Edit, Glob, Grep]
 ---
 
 # PhD Deep Read Workflow
 
-This skill implements a sophisticated **PhD Deep Read Workflow** that processes academic PDFs into structured literature notes for Obsidian using a hybrid decision-tree approach. The workflow combines:
+Turn a PDF into three artifacts the user can drop straight into Obsidian:
 
-1. **Text-First PDF Extraction**: Decision-tree using PyMuPDF (fast text extraction) for searchable PDFs and Tesseract OCR fallback for scanned/complex pages
-2. **Structured Note Generation**: Template-driven generation of comprehensive academic literature notes
-3. **Critical Thinking Canvas**: JSON Canvas files with 9 interconnected nodes for deep critical analysis
-4. **Workflow Automation**: Scripts to automate the 4-stage pipeline
+1. **Extracted Markdown** — full PDF text via PyMuPDF (fast path) with Tesseract OCR fallback for scanned pages.
+2. **Structured literature note** — YAML frontmatter, Dataview callouts, wikilinks, summary, critique, action items. You write this from the extracted text using the `clauderules.md` template.
+3. **9-node critical-thinking canvas** — Obsidian Canvas JSON with core argument, assumptions, evidence, alternatives, methodological critique, personal relevance, future directions, critical questions, hypothesis center.
 
-## When to Use This Skill
+## When to activate
 
-Activate when the user:
-- Wants to process academic PDFs into structured literature notes
-- Needs to extract text from PDFs with complex layouts or tables
-- Wants to generate Obsidian-compatible notes with YAML frontmatter and Dataview callouts
-- Needs critical thinking canvases for deep analysis of papers
-- Has a collection of PDFs to process in batch
+The user shares an academic PDF — typically by dragging it into the chat or pasting a path — and asks for any of:
 
-## Commands
+- "process this paper" / "deep read this" / "read this and make a note"
+- "summarize this paper" / "give me a literature note"
+- "critique this" / "build a critical-thinking canvas"
+- "batch-process this folder of PDFs"
 
-The skill provides these main commands:
+If they only want a quick summary (no Obsidian artifacts), this skill is overkill — answer directly instead.
 
-- `setup`: Setup environment and install required tools (PyMuPDF, Tesseract OCR)
-- `extract`: Extract text and images from PDFs using Text-First decision tree (PyMuPDF + Tesseract OCR)
-- `generate`: Prepare a structured prompt (using .clauderules template) for the user to paste into Claude Code, which then generates the literature note
-- `canvas`: Create JSON Canvas files for critical thinking with 9 interconnected nodes
-- `run`: Run full workflow automation (extract → generate → canvas)
-- `verify`: Verify output quality and consistency with existing corpus patterns
-- `batch`: Batch process directory of PDFs through all stages
-- `guide`: Show interactive workflow guide with decision-tree visualization
+## How to run it
 
-## Usage Examples
+You drive the `phd-deepread` CLI on the user's behalf. The user does not type these commands.
+
+### Single paper (most common)
 
 ```bash
-# Setup environment
-phd-deepread setup
-
-# Process a single PDF
-phd-deepread extract paper.pdf --output markdown_output/
-phd-deepread generate markdown_output/paper/ --template scripts/templates/clauderules.md
-phd-deepread canvas --title "Paper Title" --authors "Author" --year "2024" -o structured_notes/
-
-# Run full workflow automation
-phd-deepread run paper.pdf
-
-# Batch process directory
-phd-deepread batch papers/ --output literature-notes/
-
-# Show workflow guide
-phd-deepread guide
+phd-deepread run /path/to/paper.pdf
 ```
 
-## Workflow Stages
+This produces three things in `markdown_output/<paper_name>/`:
+- `<paper>.md` — extracted text
+- A prompt file in `structured_literature_notes/<paper>.md` — **this is a prompt, not a finished note**
+- `<paper>.canvas` — blank 9-node template
 
-### Stage 1: Text-First PDF Extraction
-Text-First decision tree that pre-scans PDF with PyMuPDF, uses direct text extraction for searchable pages (80%+ of academic PDFs), falls back to Tesseract OCR only for scanned/complex pages. Outputs raw markdown with embedded images and metadata JSON.
+**You then write the literature note yourself.** Read the prompt file, follow the instructions inside (it includes the full `clauderules.md` template), and overwrite the prompt file with the finished note. The prompt asks for YAML frontmatter, Dataview callouts, extensive wikilinks, and academic tone — follow that exactly.
 
-### Stage 2: Structured Note Generation
-Builds a formatted prompt using the `.clauderules` template and prints it for the user to paste into Claude Code. Claude then generates comprehensive literature notes with:
-- YAML frontmatter with specific fields
-- Dataview-compatible callouts (`> [!Synthesis]`, `> [!Metadata]`)
-- Academic critical analysis sections
-- Extensive [[Wikilinks]] for concepts, methods, proteins
-- Personal relevance and action items
+After the note is written, populate the canvas from it:
 
-### Stage 3: Critical-Thinking Canvas
-Creates JSON Canvas files with 9 interconnected nodes for deep critical analysis:
-- core-argument, assumptions, evidence-assessment
-- alternative-explanations, methodological-critique
-- personal-relevance, future-directions
-- critical-questions-enhanced, hypothesis-center
+```bash
+phd-deepread canvas -o markdown_output/<paper>/<paper>.canvas \
+  --from-note structured_literature_notes/<paper>.md --overwrite
+```
 
-### Stage 4: Verification
-Quality checks and pattern matching to ensure consistency with existing corpus.
+This maps note sections to canvas nodes by regex. The canvas still needs the user (or you) to fill in the unmapped placeholder bullets.
 
-## External Tools Required
+### Step by step (when the user wants control)
 
-The workflow depends on these external tools:
+```bash
+phd-deepread extract /path/to/paper.pdf            # PDF → markdown
+phd-deepread generate markdown_output/<paper>/ -o notes/<paper>.md   # build prompt
+phd-deepread canvas -o notes/<paper>.canvas --title "..." --authors "..." --year "..."
+```
 
-1. **PyMuPDF (fitz)**: Fast text extraction for searchable PDFs (primary method)
-2. **Tesseract OCR**: Optical character recognition for scanned/complex pages (optional fallback)
-3. **Python 3.9+**: Virtual environment for running the tools
-4. **Claude Code**: Template-driven structured note generation
-5. **Custom Python scripts**: Implement Text-First decision tree and workflow automation
+### Batch a folder
 
-## Quick Start
+```bash
+phd-deepread batch /path/to/folder -o batch_output/ --create-canvases
+```
 
-1. **Install the skill** (already done if you see this)
-2. **Run setup**: `phd-deepread setup` to check/install dependencies
-3. **Test with a PDF**: `phd-deepread extract sample.pdf`
-4. **Generate notes**: `phd-deepread generate markdown_output/sample/`
-5. **Create canvas**: `phd-deepread canvas markdown_output/sample/`
+Then loop over each `<paper>_prompt.txt` and write the finished note next to it.
+
+## Verifying output
+
+```bash
+phd-deepread verify markdown_output/<paper>/
+```
+
+Checks formatting, YAML frontmatter, callouts, wikilinks.
+
+## Templates
+
+- `scripts/templates/clauderules.md` — the literature-note template you must follow when writing the note. Loaded by `generate.py` via `importlib.resources`.
+- `scripts/templates/critical-thinking.canvas` — base canvas layout used by `canvas.py`.
+
+Do not edit these as part of normal use.
 
 ## Troubleshooting
 
-### Common Issues
+- **"command not found: phd-deepread"** — the package isn't installed or PATH is wrong. Run `phd-deepread doctor` (if available) or fall back to `python3 -m pip install --user phd-deepread-workflow` and tell the user to open a new terminal.
+- **"Tesseract not found"** — only matters for scanned (image-based) PDFs. Suggest `brew install tesseract` (macOS) or `sudo apt install tesseract-ocr` (Linux).
+- **Template not found** — package install incomplete; suggest `pip install --upgrade phd-deepread-workflow`.
 
-**Tesseract OCR not installed**: Install with `brew install tesseract` (macOS) or `sudo apt install tesseract-ocr` (Linux)
-**PyMuPDF missing**: Install with `pip install PyMuPDF`
-**OCR pages not processed**: Ensure Tesseract is installed and accessible
-**Virtual environment activation**: Ensure you activate the correct Python environment
+## Examples in this repo
 
-### Environment Variables
+- `examples/example-output.md` — what a finished literature note looks like.
+- `examples/example-canvas.canvas` — what a populated canvas looks like.
 
-```bash
-# Activate Python virtual environment
-source .venv/bin/activate
-```
-
-## Related Skills
-
-- [json-canvas](/json-canvas): Create and edit JSON Canvas files
-- [obsidian-markdown](/obsidian-markdown): Work with Obsidian Flavored Markdown
-- [obsidian-bases](/obsidian-bases): Create Obsidian Bases with views and filters
-
-## References
-
-- Workflow guide: `docs/workflow-guide.md` (also accessible via `phd-deepread guide`)
-- Example output note: `examples/example-output.md`
-- Example canvas: `examples/example-canvas.canvas`
+Match those styles when writing your own.

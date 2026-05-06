@@ -28,6 +28,7 @@ make publish-test                       # upload to TestPyPI
 make publish                            # upload to PyPI
 
 # Run the CLI locally
+phd-deepread doctor                       # check dependencies
 phd-deepread extract paper.pdf -o markdown_output/
 phd-deepread generate markdown_output/paper/
 phd-deepread canvas --title "Title" --authors "Author" --year "2024"
@@ -42,12 +43,13 @@ The CLI entry point is `scripts/phd_deepread.py:main()`, which dispatches comman
 
 | Command | Script | Role |
 |---------|--------|------|
+| `doctor` (alias `setup`) | `scripts/doctor.py` | Dependency / first-run check |
 | `extract` | `scripts/extract.py` | PDF → Markdown + images |
-| `generate` | `scripts/generate.py` | Markdown → Claude prompt + skeleton note |
-| `canvas` | `scripts/canvas.py` | → 9-node JSON Canvas file |
-| `run` | `scripts/process.py` | Orchestrates extract → generate → canvas |
+| `generate` | `scripts/generate.py` | Markdown → Claude prompt |
+| `canvas` | `scripts/canvas.py` | → 9-node JSON Canvas file (optionally populated from a finished note via `--from-note`) |
+| `run` | `scripts/process.py` | Orchestrates extract → generate prompt → canvas |
 | `verify` | `scripts/verify.py` | Quality checks on output directory |
-| `batch` | `scripts/batch.sh` | Loop `run` over a folder of PDFs |
+| `batch` | `scripts/batch.py` | Loop `run` over a folder of PDFs |
 
 ### PDF Extraction (`extract.py`)
 
@@ -61,7 +63,7 @@ Output per paper: `markdown_output/<paper_name>/` containing a `.md` file, `*_me
 
 ### Note Generation (`generate.py`)
 
-Reads the extracted markdown and loads the **clauderules template** from `scripts/templates/clauderules.md` using `importlib.resources` (reliable in installed packages). It builds a formatted prompt for Claude Code to generate a structured literature note. Does not call Claude directly — it prepares the prompt and prints it for the user to run in Claude Code. The `--skeleton` flag exists in the CLI but generation is not yet implemented.
+Reads the extracted markdown and loads the **clauderules template** from `scripts/templates/clauderules.md` using `importlib.resources` (reliable in installed packages). It builds a formatted prompt for Claude Code to generate a structured literature note. Does not call any LLM directly — it prepares the prompt and prints it (or writes it to `-o <file>`) for Claude Code to consume.
 
 ### Canvas Creation (`canvas.py`)
 
@@ -76,8 +78,9 @@ Both files must stay in `scripts/templates/` and are declared as `package_data` 
 
 ## Key Design Decisions
 
-- **No direct Claude API calls** — the workflow prepares prompts for the user to run manually in Claude Code. This is intentional: it keeps the tool dependency-free from the Anthropic SDK.
+- **No direct LLM API calls** — the workflow prepares prompts for Claude Code to consume; the CLI itself is dependency-free from any LLM SDK. OpenAI integration was added in v0.2.0 and removed shortly after — do not reintroduce it. The audience is Claude-Code-skill users.
 - **`importlib.resources` for templates** — switched from filesystem path heuristics in v0.1.6 after templates failed to load in installed packages. Do not revert to `Path(__file__).parent` for template loading.
 - **Tesseract is optional** — the tool degrades gracefully if Tesseract is absent; only scanned PDFs are affected.
 - **`config/config.yaml` is documentation-only** — no scripts read this file at runtime. Extraction thresholds and paths are controlled via CLI flags and hardcoded constants in each script.
-- **`ENABLE_EFFICIENT_ATTENTION=0`** — set this env var if using Surya OCR to avoid CUDA SDPA errors on CPU.
+- **All scripts are Python** — `setup.sh` and `batch.sh` were ported to `doctor.py` and `batch.py` so the CLI works after `pip install` (shell scripts were not in `package_data`).
+- **Skill-install-first** — `AGENTS.md` is the executable spec for installing this repo as a Claude Code skill. README leads with the one-line install path; pip is demoted to "Advanced".
