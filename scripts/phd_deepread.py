@@ -23,7 +23,7 @@ def main():
         "extract": "extract.py",
         "generate": "generate.py",
         "canvas": "canvas.py",
-"run": "process.py",
+        "run": "process.py",
         "batch": "batch.sh",
         "verify": "verify.py",
         "guide": "show_guide",
@@ -90,20 +90,28 @@ Usage: phd-deepread <command> [options]
 Commands:
   setup       Check dependencies and environment setup
   extract     Extract text/images from PDFs (Text-First decision tree: PyMuPDF + Tesseract OCR)
-  generate    Generate structured note prompts from extracted content
-  canvas      Create JSON Canvas templates for critical thinking
-  run         Run full workflow automation (extract → generate → canvas)
+  generate    Generate literature note — prints prompt, or calls OpenAI directly with --openai
+  canvas      Create JSON Canvas — populate nodes from a note with --from-note [--openai]
+  run         Run full pipeline (extract → generate → canvas), pass --openai to automate all steps
   batch       Batch process multiple PDFs
   verify      Verify output quality and consistency
   guide       Show workflow guide and documentation
   help        Show this help message
 
+API Key (required for --openai):
+  export OPENAI_API_KEY=sk-...                        # session only
+  echo 'export OPENAI_API_KEY=sk-...' >> ~/.zshrc     # permanent
+
+Non-OpenAI providers (e.g. DeepSeek for China):
+  export OPENAI_API_KEY=<your-key>
+  phd-deepread run paper.pdf --openai --model deepseek-chat --base-url https://api.deepseek.com
+
 Examples:
   phd-deepread setup
   phd-deepread extract paper.pdf -o markdown_output/
-  phd-deepread generate markdown_output/paper/
-  phd-deepread canvas --title "Paper Title" --authors "Author" --year "2024"
-  phd-deepread run paper.pdf
+  phd-deepread generate markdown_output/paper/ --openai -o notes/paper.md
+  phd-deepread canvas -o notes/paper.canvas --from-note notes/paper.md --openai
+  phd-deepread run paper.pdf --openai
   phd-deepread batch papers/ -o literature_notes/
   phd-deepread guide
 

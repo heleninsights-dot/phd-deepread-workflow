@@ -48,19 +48,28 @@ SEARCHABLE_TEXT_THRESHOLD = 100  # Minimum characters to consider page searchabl
 SEARCHABLE_PAGE_PERCENTAGE = 0.8  # 80% of pages must be searchable to use PyMuPDF for all
 
 def check_dependencies():
-    """Check if required dependencies are available."""
+    """Check if required dependencies are available.
+
+    Returns:
+        dict with keys 'pdftext' (bool) and 'tesseract' (bool).
+    """
+    result = {
+        "pdftext": PDFTEXT_AVAILABLE,
+        "tesseract": TESSERACT_AVAILABLE,
+    }
+
     if not PDFTEXT_AVAILABLE:
         print("❌ PyMuPDF (fitz) is required but not installed.")
         print("Install with: pip install PyMuPDF")
-        return False
+    else:
+        print("✅ PyMuPDF available")
 
-    print("✅ PyMuPDF available")
     if TESSERACT_AVAILABLE:
         print("✅ Tesseract OCR available (optional)")
     else:
         print("⚠ Tesseract OCR not available - OCR fallback disabled")
 
-    return True
+    return result
 
 def assess_pdf_searchability(pdf_path: Path, threshold: int = SEARCHABLE_TEXT_THRESHOLD) -> Tuple[List[int], List[int]]:
     """
@@ -100,9 +109,7 @@ def assess_pdf_searchability(pdf_path: Path, threshold: int = SEARCHABLE_TEXT_TH
         return searchable_pages, non_searchable_pages
 
     except Exception as e:
-        print(f"❌ Error assessing PDF: {e}")
-        # If assessment fails, assume all pages need OCR
-        return [], list(range(len(doc))) if 'doc' in locals() else []
+        raise RuntimeError(f"Failed to assess PDF '{pdf_path}': {e}") from e
 
 def extract_with_pymupdf(pdf_path: Path, page_nums: List[int], output_dir: Path) -> Dict:
     """
@@ -371,6 +378,57 @@ def combine_extractions(pdf_path: Path, pymupdf_metadata: Dict, ocr_metadata: Di
 
     return combined_metadata
 
+def extract_pdf(pdf_path, output_dir=None, lang="eng"):
+    """Public API: run the full Text-First extraction pipeline on a PDF.
+
+    Args:
+        pdf_path: path to the PDF file (str or Path)
+        output_dir: directory to write outputs into; a temp dir is used when None
+        lang: Tesseract language code (default 'eng')
+
+    Returns:
+        dict with 'success' (bool) and extraction metadata on success,
+        or {'success': False, 'error': str} on failure.
+    """
+    import tempfile
+
+    pdf_path = Path(pdf_path)
+    if not pdf_path.exists():
+        return {"success": False, "error": f"File not found: {pdf_path}"}
+
+    try:
+        _tmp_dir = None
+        if output_dir is None:
+            _tmp_dir = tempfile.mkdtemp()
+            out_path = Path(_tmp_dir) / pdf_path.stem.strip()
+        else:
+            out_path = Path(output_dir) / pdf_path.stem.strip()
+        out_path.mkdir(parents=True, exist_ok=True)
+
+        searchable, non_searchable = assess_pdf_searchability(pdf_path)
+        total_pages = len(searchable) + len(non_searchable)
+
+        use_text_for_all = (
+            len(searchable) / total_pages >= SEARCHABLE_PAGE_PERCENTAGE
+            if total_pages > 0 else False
+        )
+
+        if use_text_for_all:
+            pymupdf_meta = extract_with_pymupdf(pdf_path, list(range(total_pages)), out_path)
+            ocr_meta = {"pages": []}
+        else:
+            pymupdf_meta = extract_with_pymupdf(pdf_path, searchable, out_path) if searchable else {"pages": []}
+            ocr_meta = extract_with_ocr(pdf_path, non_searchable, out_path, lang) if non_searchable else {"pages": []}
+
+        combined = combine_extractions(pdf_path, pymupdf_meta, ocr_meta, out_path, total_pages)
+        combined["success"] = True
+        combined["output_dir"] = str(out_path)
+        return combined
+
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Extract text from PDFs using Text-First decision tree (PyMuPDF + optional Tesseract OCR)"
@@ -396,7 +454,8 @@ def main():
     args = parser.parse_args()
 
     # Check dependencies
-    if not check_dependencies():
+    deps = check_dependencies()
+    if not deps["pdftext"]:
         return 1
 
     pdf_path = Path(args.pdf_path)
@@ -405,7 +464,7 @@ def main():
         return 1
 
     # Create output directory
-    output_dir = Path(args.output_dir) / pdf_path.stem
+    output_dir = Path(args.output_dir) / pdf_path.stem.strip()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print(f"🎓 PhD Deep Read Workflow - Text-First Extraction")

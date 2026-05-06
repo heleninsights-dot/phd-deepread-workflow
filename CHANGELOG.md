@@ -13,14 +13,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - None
 
-### Deprecated
-- None
-
-### Removed
-- None
-
 ### Fixed
 - None
+
+---
+
+## [0.2.0] - 2026-05-05
+
+### Added
+- **OpenAI-compatible API integration** — `generate` and `canvas` commands now accept `--openai`, `--model`, and `--base-url` flags to call any OpenAI-compatible API directly (OpenAI, DeepSeek, etc.) without copy-pasting prompts
+- `--from-note` flag on `canvas` command — populates all 9 canvas nodes from a generated literature note automatically
+- `--base-url` flag on `generate`, `canvas`, and `run` — redirects API calls to non-OpenAI providers; also reads `OPENAI_BASE_URL` env var (e.g. `https://api.deepseek.com` for users in China)
+- `run` command now accepts `--openai`, `--model`, `--base-url`, and `--notes-dir` flags for a fully automated end-to-end pipeline
+- `extract_pdf()` public function in `extract.py` for programmatic use
+- `verify_extraction()`, `verify_note()`, `verify_canvas()`, `verify_all()` public functions in `verify.py` returning structured result dicts
+- `REQUIRED_EXTRACTION_FILES`, `REQUIRED_NOTE_SECTIONS`, `REQUIRED_CANVAS_FIELDS` constants in `verify.py`
+
+### Changed
+- `check_dependencies()` in `extract.py` now returns a dict `{'pdftext': bool, 'tesseract': bool}` instead of a plain bool
+- `run` pipeline saves notes to `structured_literature_notes/` and wires canvas generation directly from the note
+- README installation section rewritten to clarify the layering: Python → pip install → AI provider → Tesseract
+- Help text and README updated with API key setup instructions and non-OpenAI provider examples (including DeepSeek for China)
+
+### Fixed
+- Python comment `# Limit to first 5000 chars` was being sent literally inside API prompts
+- "Copy the prompt above" message was shown even when the prompt had been written to a file
+- `"run": "process.py"` indentation error in CLI dispatcher
+- `assess_pdf_searchability()` now raises on invalid or empty PDFs instead of silently returning empty lists
+- 17 pre-existing test failures in `test_extract.py` and `test_verify.py` (missing public functions and incorrect return types)
 
 ## [0.1.6] - 2026-03-06
 
