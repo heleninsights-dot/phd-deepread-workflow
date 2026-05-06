@@ -1,236 +1,63 @@
----
-feature: thumbnails/external/74a4c4ea2d920c8d9a05a7420946145d.svg
-thumbnail: thumbnails/external/74a4c4ea2d920c8d9a05a7420946145d.svg
----
 # PhD Deep Read Workflow
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI version](https://badge.fury.io/py/phd-deepread-workflow.svg)](https://pypi.org/project/phd-deepread-workflow/)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Claude Code Skill](https://img.shields.io/badge/Claude%20Code-Skill-6E56CF)](https://claude.com/claude-code)
 
-> Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian using AI-assisted analysis.
+> Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian, with Claude doing the writing.
+
+---
+
+## Install
+
+**Using Claude Code?** Paste this one line into a Claude Code chat — Claude will install the skill for you:
+
+> Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
+
+That's it. Claude reads `AGENTS.md` in this repo, runs the install steps, and tells you when it's ready.
+
+After it finishes, drag a PDF into a new Claude Code chat and say *"process this paper with phd-deepread"*.
+
+> Don't have Claude Code yet? [Install it first](https://docs.claude.com/en/docs/claude-code/quickstart) (one command), then come back here.
 
 ---
 
 ## What you get
 
-When you run this workflow on a PDF, you get three output files:
+Each PDF you process gives you three files:
 
 | Output | What it is |
 |--------|-----------|
-| `paper.md` | The full text of your PDF, converted to Markdown |
-| `paper_literature_note.md` | A structured academic note — with summary, critique, wikilinks, and Obsidian frontmatter — written by Claude |
-| `paper.canvas` | A 9-node critical-thinking canvas for deep analysis, ready to open in Obsidian |
+| `paper.md` | Full text of the PDF, converted to Markdown |
+| `paper_literature_note.md` | Structured academic note — summary, critique, wikilinks, Obsidian frontmatter — written by Claude |
+| `paper.canvas` | A 9-node critical-thinking canvas, ready to open in Obsidian |
 
 ---
 
-## Installation
+## Using the workflow
 
-### Step 1 — Install Python (if you don't have it)
+After install, in a Claude Code chat:
 
-`pip` is Python's built-in package installer — it comes with Python automatically. So installing Python is all you need to get pip.
+1. **Drag a PDF into the chat** (or paste its file path).
+2. **Ask Claude:** *"Process this paper with phd-deepread"*.
+3. Claude runs the extraction, writes the literature note, and creates the canvas — all in one go.
 
-**Check if you already have Python:**
-```bash
-python3 --version
-```
-
-If you see `Python 3.9.x` or higher, skip to Step 2. If not, download it from [python.org](https://www.python.org/downloads/).
+You can also be more specific: *"Extract this PDF and just give me the prompt — I'll write the note myself."*
 
 ---
 
-### Step 2 — Install the workflow
+## What lives behind the scenes
 
-This one command installs the `phd-deepread` CLI and all the PDF/OCR libraries it needs:
-
-```bash
-pip install phd-deepread-workflow
-```
-
-**What this installs:**
-- The `phd-deepread` command you'll type in the terminal
-- PyMuPDF — fast PDF text extraction
-- pytesseract + Pillow — OCR for scanned PDFs
-- The built-in templates for notes and canvases
-
-**What this does NOT install** (because they are not Python packages):
-- An AI provider — needed for note generation; set up in Step 3
-- Tesseract OCR engine — needed only for scanned PDFs; see Step 4
-
----
-
-### Step 3 — Set up an AI provider (required for note generation)
-
-The workflow uses AI to read your paper and write the structured literature note. Set up an API key for your chosen provider and export it as an environment variable before running:
-
-```bash
-export OPENAI_API_KEY=sk-...        # OpenAI — use with --openai flag
-# or
-export ANTHROPIC_API_KEY=sk-...     # Anthropic / Claude Code
-```
-
-To make it permanent, add the line to your `~/.zshrc` or `~/.bashrc`.
-
-> **For users in China:** OpenAI and Anthropic may not be directly accessible from mainland China. Consider using a domestic provider such as [DeepSeek](https://platform.deepseek.com) — it is OpenAI-compatible. Set `OPENAI_API_KEY` to your DeepSeek key and pass `--model deepseek-chat --base-url https://api.deepseek.com` when running.
-
----
-
-### Step 4 — Install Tesseract (optional — only for scanned PDFs)
-
-Tesseract reads text from image-based PDFs (e.g. old scanned papers). Skip this if your PDFs come from a journal website — they almost always have selectable text.
-
-**Not sure if you need it?** Open your PDF and try to highlight text. If you can highlight it, you don't need Tesseract.
-
-```bash
-brew install tesseract          # macOS
-sudo apt install tesseract-ocr  # Ubuntu/Debian
-```
-
----
-
-### Verify everything is ready
-
-```bash
-phd-deepread setup
-```
-
----
-
-## Running the workflow
-
-### The simplest way — one command
-
-```bash
-# With OpenAI (fully automatic — no copy-pasting)
-phd-deepread run paper.pdf --openai
-
-# Without an API key (prints a prompt to paste into Claude Code manually)
-phd-deepread run paper.pdf
-```
-
-> **Tip for beginners:** Not sure how to type a file path? Drag and drop the PDF from Finder/Explorer directly into the terminal window — it fills in the path for you.
-
----
-
-### Step by step (if you prefer more control)
-
-**Step 1 — Extract the PDF**
-
-```bash
-phd-deepread extract paper.pdf
-```
-
-Creates `markdown_output/paper/` with the extracted text and images.
-
-**Step 2 — Generate the literature note**
-
-```bash
-# With OpenAI — writes the note directly to a file
-phd-deepread generate markdown_output/paper/ --openai -o notes/paper.md
-
-# Without OpenAI — prints a prompt to paste into Claude Code
-phd-deepread generate markdown_output/paper/
-```
-
-**Step 3 — Create the canvas from the note**
-
-```bash
-# With OpenAI — fills all 9 canvas nodes from the note automatically
-phd-deepread canvas -o notes/paper.canvas --from-note notes/paper.md --openai
-
-# Without OpenAI — creates a canvas with blank node templates to fill in yourself
-phd-deepread canvas --title "Paper Title" --authors "Smith, J." --year "2024" \
-  -o notes/paper.canvas
-```
-
----
-
-### Batch process a whole folder of PDFs
-
-```bash
-phd-deepread batch papers/ --output literature-notes/
-```
-
-> **Tip:** You can drag and drop folders too — type `phd-deepread batch `, drag your PDF folder into the terminal, type ` --output `, drag your output folder, then press Enter.
-
----
-
-## What to do with the output
-
-After running the workflow, open your output folder. You will find:
-
-```
-markdown_output/paper/
-├── paper.md                  ← Full extracted text (Markdown)
-├── paper_literature_note.md  ← Structured note written by Claude
-├── paper.canvas              ← Critical-thinking canvas for Obsidian
-├── paper_meta.json           ← Extraction metadata (for reference)
-└── _page_*_*.png             ← Any images extracted from the PDF
-```
-
-- **Open `.md` files** in Obsidian, Typora, or any Markdown editor
-- **Open `.canvas` files** in Obsidian with the Canvas plugin enabled
-- **Copy notes into your Obsidian vault** — they are already formatted with YAML frontmatter and Dataview callouts
-
----
-
-## Troubleshooting
-
-**"command not found: phd-deepread"**
-The package installed but your terminal can't find it. Try:
-```bash
-python3 -m pip install phd-deepread-workflow
-python3 -m phd_deepread_workflow
-```
-Or open a new terminal window after installing.
-
-**"command not found: claude"**
-Claude Code isn't installed or not in your PATH. Install it:
-```bash
-npm install -g @anthropic-ai/claude-code
-```
-Then open a new terminal window and try again. Alternatively, use `--openai` with an OpenAI API key instead.
-
-**The literature note was not generated**
-- With `--openai`: check that `OPENAI_API_KEY` is set (`echo $OPENAI_API_KEY`). If empty, run `export OPENAI_API_KEY=sk-...`
-- Without `--openai`: the command prints a prompt — copy it and paste it into a Claude Code session manually.
-
-**"Tesseract not found"**
-```bash
-brew install tesseract          # macOS
-sudo apt install tesseract-ocr  # Ubuntu/Debian
-```
-
-**"PyMuPDF missing"**
-```bash
-pip install PyMuPDF
-```
-
-**"Template not found" after installing**
-```bash
-pip install --upgrade phd-deepread-workflow
-```
-
-**Using a virtual environment (recommended for clean installs)**
-```bash
-python3 -m venv venv
-source venv/bin/activate      # macOS/Linux
-# or: venv\Scripts\activate   # Windows
-pip install phd-deepread-workflow
-```
-
----
-
-## All commands
+The skill exposes a small CLI (`phd-deepread`). You don't need to type these — Claude calls them for you — but here they are:
 
 | Command | What it does |
 |---------|-------------|
 | `setup` | Check that all dependencies are installed |
 | `extract <pdf>` | Extract text and images from a PDF |
-| `generate <dir> [--openai]` | Generate literature note — calls OpenAI directly with `--openai`, otherwise prints a prompt |
-| `canvas -o <file> [--from-note <md> --openai]` | Create a 9-node canvas; populate from a note automatically with `--openai` |
-| `run <pdf> [--openai]` | Full pipeline: extract → generate → canvas |
+| `generate <dir>` | Build a literature-note prompt from extracted text |
+| `canvas -o <file> [--from-note <md>]` | Create a 9-node canvas; populate from a finished note with `--from-note` |
+| `run <pdf>` | Full pipeline: extract → generate prompt → canvas |
 | `batch <dir>` | Process all PDFs in a folder |
 | `verify <dir>` | Quality-check output files |
 | `guide` | Show the workflow guide |
@@ -239,9 +66,60 @@ pip install phd-deepread-workflow
 
 ## Integration with Obsidian and Zotero
 
-**Obsidian:** Notes use YAML frontmatter and Dataview-compatible callouts out of the box. Canvas files open with the Obsidian Canvas plugin. Wikilinks connect to your existing notes.
+**Obsidian:** Notes use YAML frontmatter and Dataview-compatible callouts. Canvas files open with the Obsidian Canvas plugin. Wikilinks connect to your existing notes.
 
 **Zotero:** Use your Zotero citation key as the `citekey` field in the generated note. Export PDFs from Zotero into your processing folder before running the workflow.
+
+---
+
+## Advanced — manual (pip) install
+
+If you don't use Claude Code, or you want the standalone CLI:
+
+```bash
+python3 -m pip install --user phd-deepread-workflow
+```
+
+Requires Python 3.10+. For scanned PDFs (image-based), also install Tesseract:
+
+```bash
+brew install tesseract          # macOS
+sudo apt install tesseract-ocr  # Ubuntu/Debian
+```
+
+Then run any of the commands in the table above. The note step prints a prompt you paste into your AI chat tool of choice.
+
+---
+
+## Troubleshooting
+
+**"command not found: phd-deepread"** — your terminal can't see the install location. Open a new terminal window. If still missing, add `~/.local/bin` to your PATH:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+```
+
+**"Tesseract not found"** — only matters for scanned PDFs:
+
+```bash
+brew install tesseract          # macOS
+sudo apt install tesseract-ocr  # Ubuntu/Debian
+```
+
+**"Template not found" after installing** — upgrade to the latest version:
+
+```bash
+pip install --upgrade phd-deepread-workflow
+```
+
+**Using a virtual environment (cleanest install)**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate      # macOS/Linux
+# or: venv\Scripts\activate   # Windows
+pip install phd-deepread-workflow
+```
 
 ---
 

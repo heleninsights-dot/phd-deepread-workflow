@@ -1,175 +1,126 @@
 # PhD Deep Read Workflow Guide
 
-This guide explains the **PhD Deep Read Workflow**, a sophisticated pipeline for processing academic PDFs into structured literature notes and critical-thinking canvases for Obsidian.
+This guide explains the **PhD Deep Read Workflow**: a pipeline that turns academic PDFs into structured Obsidian literature notes and 9-node critical-thinking canvases.
 
 ## Overview
 
-The workflow transforms raw PDFs into comprehensive academic notes through four stages:
+The workflow has four stages:
 
-1. **Hybrid PDF Extraction** (pdftext + Surya OCR)
-2. **Structured Note Generation** (Claude Code with `.clauderules` template)
-3. **Critical-Thinking Canvas Creation** (9-node JSON Canvas)
-4. **Verification & Integration** (Quality checks and pattern matching)
+1. **PDF extraction** — PyMuPDF for searchable text, Tesseract OCR fallback for scanned pages
+2. **Note generation** — Claude Code writes the literature note, following the `clauderules.md` template
+3. **Canvas creation** — 9-node JSON Canvas, optionally populated from the finished note
+4. **Verification** — quality checks against the template
 
-## Stage 1: Text-First PDF Extraction
+## Stage 1 — Text-First PDF extraction
 
-### Decision-Tree Architecture
-
-The extraction uses a **Text-First Decision Tree** that prioritizes speed and accuracy:
+The extractor pre-scans the PDF with PyMuPDF, then chooses per-page:
 
 ```
 PDF Input
     ↓
-Pre-scan with PyMuPDF (fast)
+Pre-scan with PyMuPDF
     ↓
-Assess searchable text per page
-    ├── If page has ≥100 chars searchable text → Use PyMuPDF (pdftext)
-    ├── If page lacks searchable text → Use Tesseract OCR (if available)
-    └── If 80%+ pages searchable → Use PyMuPDF for ALL pages
+Page has ≥100 chars searchable text?
+    ├── Yes → PyMuPDF (fast text path)
+    └── No  → Tesseract OCR (if installed); else images-only
+
+If 80%+ of pages are searchable → use PyMuPDF for all pages.
 ```
 
-**Key Features:**
-- **Text-First approach**: Uses direct text extraction whenever possible (80%+ of academic PDFs)
-- **Smart OCR fallback**: Only uses Tesseract OCR for scanned/complex pages
-- **Image extraction** for figures and tables
-- **Metadata generation** with extraction method tracking per page
-- **Configurable thresholds**: Adjust searchability criteria for different PDF types
+See `docs/decision-tree.md` for the full algorithm and configurable thresholds.
 
-### Tools Used
-- **PyMuPDF (fitz)**: Fast text extraction for searchable PDFs
-- **Tesseract OCR**: Optical character recognition for scanned/complex pages (optional)
-- **Custom Python script**: Implements the Text-First decision tree (no external orchestrator)
+### Tools
 
-### Environment Requirements
-```bash
-# Python 3.10+ virtual environment
-source .venv/bin/activate
+- **PyMuPDF (fitz)** — fast direct text extraction
+- **Tesseract OCR** — optional fallback for scanned pages
+- **Custom Python script** — `scripts/extract.py`
 
-# Optional: Disable SDPA for compatibility (legacy for Surya)
-export ENABLE_EFFICIENT_ATTENTION=0
+### Output structure
+
+```
+markdown_output/<paper_name>/
+├── <paper>.md                 # extracted markdown (text + image refs)
+├── <paper>_meta.json          # per-page extraction methods, TOC, metadata
+└── _page_*_*.png/.jpeg        # extracted images
 ```
 
-### Output Structure
-```
-markdown_output/[PDF_NAME]/
-├── [PDF_NAME].md              # Raw markdown with embedded images
-├── [PDF_NAME]_meta.json       # Metadata, TOC, extraction methods per page
-├── blocks.json                # Block-level segmentation data
-└── _page_*_*.jpeg/.png        # Extracted images
-```
+## Stage 2 — Structured note generation
 
-## Stage 2: Structured Note Generation
+Claude Code writes the literature note. The template `scripts/templates/clauderules.md` (175+ lines) defines the required structure:
 
-### The `.clauderules` Template
+- **YAML frontmatter** — `category`, `tags`, `citekey`, `status`, `dateread`
+- **Dataview callouts** — `[!Citation]`, `[!Synthesis]`, `[!Metadata]`, `[!Abstract]`
+- **Academic sections** — Research Gap & Hypothesis · Methodology & Evidence · Key Findings · Critical Analysis (Strengths/Limitations/Open Questions) · Connections · Action Items · Summary
+- **Wikilinks** — extensive linking of concepts, methods, proteins, diseases
 
-A comprehensive 175+ line template that ensures consistent academic note structure:
+The flow:
 
-- **YAML Frontmatter**: `category`, `tags`, `citekey`, `status`, `dateread`
-- **Dataview Callouts**: `[!Citation]`, `[!Synthesis]`, `[!Metadata]`, `[!Abstract]`
-- **Academic Sections**:
-  - Research Gap & Hypothesis
-  - Methodology & Evidence Base
-  - Key Mechanisms & Findings
-  - Critical Analysis (Strengths/Limitations/Open Questions)
-  - Connections & Integration
-  - Action Items & Next Steps
-  - Summary & Conclusion
-- **Wikilinks**: Extensive linking of concepts, methods, proteins, diseases
+1. `phd-deepread generate <extraction_dir> -o <note.md>` writes a prompt file containing the extracted text plus the template instructions.
+2. You (or Claude Code) read that prompt and overwrite the file with the finished note.
 
-### Generation Process
+See `examples/example-output.md` for a complete worked example.
 
-1. **Read extracted markdown** from Stage 1 output
-2. **Apply `.clauderules` template** with Claude Code assistance
-3. **Fill template** with critical analysis of the paper
-4. **Generate structured note** in raw Markdown format
-5. **Save to** `structured_literature_notes/[Citekey].md`
+## Stage 3 — Critical-thinking canvas
 
-### Example Output
-See `examples/example-output.md` for a complete example.
+A 9-node JSON Canvas based on `scripts/templates/critical-thinking.canvas`:
 
-## Stage 3: Critical-Thinking Canvas Creation
+1. **core-argument** — primary claim and logical chain
+2. **assumptions** — explicit, implicit, questionable
+3. **evidence-assessment** — strong / moderate / weak evidence
+4. **alternative-explanations** — competing hypotheses, confounders
+5. **methodological-critique** — design and measurement limitations
+6. **personal-relevance** — connections to your existing work
+7. **future-directions** — short / medium / long-term research goals
+8. **critical-questions-enhanced** — falsifiability, mechanism, implementation
+9. **hypothesis-center** — central hypothesis with innovation/plausibility/evidence scores
 
-### 9-Node Canvas Structure
-
-Based on the `ValverdePhotobiomodulation2022-CriticalThinking.canvas` template:
-
-1. **core-argument**: Primary claim and logical chain
-2. **assumptions**: Explicit, implicit, and questionable assumptions
-3. **evidence-assessment**: Strength of evidence (strong/moderate/weak)
-4. **alternative-explanations**: Competing hypotheses and confounding factors
-5. **methodological-critique**: Study design limitations and measurement issues
-6. **personal-relevance**: Connections to research interests and existing work
-7. **future-directions**: Immediate, medium-term, and long-term research goals
-8. **critical-questions-enhanced**: Hypothesis testing, mechanism, implementation questions
-9. **hypothesis-center**: Central hypothesis re-examined with innovation/plausibility/evidence scores
-
-### Layout
-Nodes are spatially arranged with connecting edges to facilitate visual critical thinking.
-
-### Example Canvas
-See `examples/example-canvas.canvas` for the complete JSON structure.
-
-## Stage 4: Verification & Integration
-
-### Quality Checks
-
-1. **Format verification**: Ensure note follows `.clauderules` template exactly
-2. **Wikilink density**: 10+ relevant concept links
-3. **Dataview compatibility**: Proper YAML frontmatter and callout syntax
-4. **Canvas structure**: 9 nodes with appropriate connections
-5. **Pattern matching**: Consistency with existing corpus of processed papers
-
-### Integration with Obsidian
-
-- Notes are ready for use in Obsidian with Dataview plugin
-- Canvases work with Obsidian Canvas plugin
-- All wikilinks connect to existing or future notes
-
-## Workflow Commands
-
-The skill provides these commands:
+The canvas can be populated from a finished note via regex section mapping:
 
 ```bash
-# Setup environment
-phd-deepread setup
-
-# Single PDF processing
-phd-deepread extract paper.pdf --output markdown_output/
-phd-deepread generate markdown_output/paper/ --template scripts/templates/clauderules.md
-phd-deepread canvas markdown_output/paper/ --output structured_notes/
-
-# Batch processing
-phd-deepread batch papers/ --output literature-notes/
-
-# Interactive guide
-phd-deepread guide
+phd-deepread canvas -o paper.canvas --from-note paper.md --overwrite
 ```
 
-## Time Estimates
+See `examples/example-canvas.canvas`.
 
-| Stage | Time per Paper | Notes |
-|-------|----------------|-------|
-| Extraction | 10-40 minutes | Depends on PDF complexity, pages, OCR needs |
-| Note Generation | 10-25 minutes | Claude Code interaction time |
-| Canvas Creation | 5-10 minutes | Template-based, quick editing |
-| Verification | 2-5 minutes | Quick quality checks |
+## Stage 4 — Verification
 
-**Total**: 27-80 minutes per paper
+```bash
+phd-deepread verify markdown_output/<paper>/
+```
+
+Checks:
+- YAML frontmatter present and well-formed
+- Dataview callouts use correct syntax
+- Wikilink density (target: 10+ links)
+- Canvas has 9 nodes with the expected IDs
+
+## Commands
+
+```bash
+phd-deepread doctor                                       # check dependencies
+phd-deepread extract paper.pdf                            # PDF → markdown
+phd-deepread generate markdown_output/paper/ -o note.md   # build prompt
+phd-deepread canvas -o paper.canvas --from-note note.md   # canvas from note
+phd-deepread run paper.pdf                                # full pipeline
+phd-deepread batch papers/ -o batch_output                # whole folder
+phd-deepread verify markdown_output/paper/
+```
+
+## Time per paper
+
+| Stage | Time | Notes |
+|-------|------|-------|
+| Extraction | 10–40 min | depends on page count and OCR needs |
+| Note writing | 10–25 min | Claude Code interaction time |
+| Canvas | 5–10 min | template-based, light editing |
+| Verification | 2–5 min | quick checks |
 
 ## Troubleshooting
 
-### Common Issues
-
-**Tesseract OCR not installed**
+**Tesseract OCR not installed** (only matters for scanned PDFs)
 ```bash
-# macOS
-brew install tesseract
-
-# Ubuntu/Debian
-sudo apt install tesseract-ocr
-
-# Python package
-pip install pytesseract pillow
+brew install tesseract           # macOS
+sudo apt install tesseract-ocr   # Ubuntu/Debian
 ```
 
 **PyMuPDF (fitz) not installed**
@@ -177,49 +128,19 @@ pip install pytesseract pillow
 pip install PyMuPDF
 ```
 
-**Missing images in extraction**
-- Check `--disable_image_extraction` not set
-- Verify PDF contains extractable images
+**Missing images in extraction** — verify the PDF actually contains embedded images; some scanned PDFs do not.
 
-**Virtual environment activation**
-```bash
-source .venv/bin/activate
-```
+**OCR pages not processed** — install Tesseract (above), check supported languages with `tesseract --list-langs`, and pass `--lang <code>` for non-English PDFs.
 
-**OCR pages not processed**
-- Install Tesseract OCR (see above)
-- Check language support: `tesseract --list-langs`
-- Use `--lang` parameter for non-English PDFs
+## Integration
 
-## Advanced Usage
-
-### Custom Templates
-- Modify `scripts/templates/clauderules.md` for different academic fields
-- Create custom canvas templates with different node structures
-- Adjust extraction parameters for specific PDF types
-
-### Batch Processing
-- Use `batch.sh` for processing multiple PDFs overnight
-- Combine with cron jobs for automated processing
-- Generate progress reports and summaries
-
-### Integration with Zotero
-- Use Zotero's citation keys as `citekey` in frontmatter
-- Export PDFs from Zotero to processing directory
-- Import generated notes back into Zotero as linked files
+- **Obsidian** — drop notes into your vault; they work with Dataview and the Canvas plugin out of the box.
+- **Zotero** — use Zotero citation keys as the `citekey` field; export PDFs to your processing folder.
 
 ## References
 
-- Original workflow documentation: `Demo_PhDDeepRead/`
-- Decision-tree architecture: `decision-tree.md`
-- Decision-tree visualization: `PhD DeepRead_V2.html`
-- Workflow demonstration: `2020-Yang_Workflow_Demo_Memo.md`
-- Step-by-step instructions: `plan mode.md`
-
-## Getting Help
-
-Use `phd-deepread guide` for interactive guidance or refer to this document.
-
-For issues with external tools, consult their respective documentation:
-- [PyMuPDF Documentation](https://pymupdf.readthedocs.io/)
-- [Tesseract OCR GitHub](https://github.com/tesseract-ocr/tesseract)
+- [PyMuPDF docs](https://pymupdf.readthedocs.io/)
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
+- Decision-tree details: `docs/decision-tree.md`
+- Example note: `examples/example-output.md`
+- Example canvas: `examples/example-canvas.canvas`

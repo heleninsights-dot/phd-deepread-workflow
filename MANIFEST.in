@@ -1,8 +1,9 @@
 include LICENSE
 include README.md
+include AGENTS.md
+include SKILL.md
 include requirements.txt
 include requirements-dev.txt
-include install.sh
 include Makefile
 include pyproject.toml
 include .gitignore
@@ -12,5 +13,5 @@ include scripts/templates/*
 include scripts/templates/.*
 include docs/*.md
 include examples/*
-recursive-include scripts *.py *.sh
+recursive-include scripts *.py
 recursive-include tests *.py

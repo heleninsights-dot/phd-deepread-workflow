@@ -7,7 +7,6 @@ This script helps generate structured literature notes by:
 1. Reading extracted markdown from Text-First extraction output
 2. Loading the .clauderules template
 3. Creating a formatted prompt for Claude Code
-4. Optionally calling the OpenAI API directly to generate the note (--openai flag)
 """
 
 import argparse
@@ -199,33 +198,6 @@ Ready? Begin.
 
     return prompt_template
 
-def generate_with_openai(prompt, model, api_key, base_url=None):
-    """Call OpenAI-compatible API to generate a structured literature note from the prompt."""
-    try:
-        import openai
-    except ImportError:
-        raise RuntimeError(
-            "openai package not installed. Run: pip install openai"
-        )
-
-    client = openai.OpenAI(api_key=api_key, **({"base_url": base_url} if base_url else {}))
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You are an expert academic assistant that generates structured literature notes "
-                    "in Obsidian Markdown format. Follow the provided template exactly. "
-                    "Output ONLY the completed Markdown, no commentary."
-                ),
-            },
-            {"role": "user", "content": prompt},
-        ],
-    )
-    return response.choices[0].message.content
-
-
 def main():
     parser = argparse.ArgumentParser(
         description="Prepare extracted PDF content for structured note generation with Claude Code"
@@ -233,16 +205,7 @@ def main():
     parser.add_argument("extraction_dir", help="Directory containing extracted PDF content (from marker)")
     parser.add_argument("-t", "--template", default="templates/clauderules.md",
                        help="Path to .clauderules template relative to script directory (default: templates/clauderules.md)")
-    parser.add_argument("-o", "--output", help="Output file for generated note or prompt (default: print to stdout)")
-    parser.add_argument("--skeleton", action="store_true",
-                       help="Generate a skeleton note with placeholders instead of a full prompt")
-    parser.add_argument("--openai", action="store_true",
-                       help="Call an OpenAI-compatible API to generate the literature note")
-    parser.add_argument("--model", default="gpt-4o",
-                       help="Model name (default: gpt-4o). Use e.g. deepseek-chat for DeepSeek.")
-    parser.add_argument("--base-url", dest="base_url", default=None,
-                       help="API base URL for non-OpenAI providers (e.g. https://api.deepseek.com). "
-                            "Can also be set via OPENAI_BASE_URL env var.")
+    parser.add_argument("-o", "--output", help="Output file for generated prompt (default: print to stdout)")
 
     args = parser.parse_args()
 
@@ -293,65 +256,27 @@ def main():
 
         print()
 
-        if args.skeleton:
-            # Generate skeleton note (placeholder version)
-            print("Generating skeleton note with placeholders...")
-            # This would create a basic structured note with placeholders
-            # For now, just show we'd do it
-            print("(Skeleton generation not yet implemented)")
-            return 0
-
         # Create prompt
         prompt = create_claude_prompt(extracted_text, template, paper_info)
 
-        if args.openai:
-            api_key = os.environ.get("OPENAI_API_KEY")
-            if not api_key:
-                print("❌ OPENAI_API_KEY is not set.", file=sys.stderr)
-                print("", file=sys.stderr)
-                print("   To set it for this session:", file=sys.stderr)
-                print("     export OPENAI_API_KEY=sk-...", file=sys.stderr)
-                print("", file=sys.stderr)
-                print("   To make it permanent (add to ~/.zshrc or ~/.bashrc):", file=sys.stderr)
-                print("     echo 'export OPENAI_API_KEY=sk-...' >> ~/.zshrc && source ~/.zshrc", file=sys.stderr)
-                return 1
-
-            base_url = args.base_url or os.environ.get("OPENAI_BASE_URL")
-            provider = base_url or "api.openai.com"
-            print(f"🤖 Calling API: {provider} (model: {args.model})...")
-            note = generate_with_openai(prompt, args.model, api_key, base_url=base_url)
-            print("✅ Note generated.")
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(prompt)
+            print(f"✅ Prompt written to: {output_path}")
             print()
-
-            if args.output:
-                output_path = Path(args.output)
-                output_path.parent.mkdir(parents=True, exist_ok=True)
-                with open(output_path, 'w', encoding='utf-8') as f:
-                    f.write(note)
-                print(f"✅ Literature note saved to: {output_path}")
-            else:
-                print("=" * 80)
-                print(note)
-                print("=" * 80)
+            print("📋 Next steps:")
+            print(f"1. Open {output_path} and copy the prompt")
+            print("2. Paste it into a Claude Code conversation")
+            print("3. Claude will generate the structured literature note")
+            print("4. Save the output to structured_literature_notes/")
         else:
-            if args.output:
-                output_path = Path(args.output)
-                output_path.parent.mkdir(parents=True, exist_ok=True)
-                with open(output_path, 'w', encoding='utf-8') as f:
-                    f.write(prompt)
-                print(f"✅ Prompt written to: {output_path}")
-                print()
-                print("📋 Next steps:")
-                print(f"1. Open {output_path} and copy the prompt")
-                print("2. Paste it into a Claude Code conversation")
-                print("3. Claude will generate the structured literature note")
-                print("4. Save the output to structured_literature_notes/")
-            else:
-                print("=" * 80)
-                print(prompt)
-                print("=" * 80)
-                print()
-                print("📋 Copy the prompt above and paste it into a Claude Code conversation.")
+            print("=" * 80)
+            print(prompt)
+            print("=" * 80)
+            print()
+            print("📋 Copy the prompt above and paste it into a Claude Code conversation.")
 
         return 0
 

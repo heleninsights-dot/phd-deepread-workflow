@@ -6,14 +6,14 @@ Generates critical-thinking JSON Canvas files with 9 interconnected nodes.
 This script creates a structured canvas for deep critical analysis of academic papers,
 based on the template from ValverdePhotobiomodulation2022-CriticalThinking.canvas.
 
-Use --from-note to populate canvas nodes from a generated literature note.
-Add --openai to have GPT fill each node automatically (requires OPENAI_API_KEY).
+Use --from-note to populate canvas nodes from a generated literature note via
+best-effort regex section mapping.
 """
 
 import argparse
 import json
-import sys
 import os
+import sys
 from pathlib import Path
 from datetime import datetime
 import importlib.resources
@@ -180,48 +180,6 @@ def generate_citekey(paper_info):
     year = paper_info.get('year', 'Year')
     return f"{first_author}{first_word}{year}"
 
-def populate_nodes_with_openai(note_text, canvas, model, api_key, base_url=None):
-    """Call an OpenAI-compatible API to fill all 9 canvas nodes from a literature note."""
-    try:
-        import openai
-    except ImportError:
-        raise RuntimeError("openai package not installed. Run: pip install openai")
-
-    node_templates = {node["id"]: node["text"] for node in canvas["nodes"]}
-
-    system = (
-        "You are an expert academic analyst. Given a structured literature note, "
-        "populate 9 Obsidian canvas nodes for critical thinking. "
-        "Return ONLY a valid JSON object where each key is a node ID and each value "
-        "is the full markdown content for that node, following the template structure provided."
-    )
-    user_msg = (
-        f"Literature note:\n\n{note_text}\n\n"
-        f"Node templates (keep the headings, replace placeholder text with content from the note):\n"
-        f"{json.dumps(node_templates, indent=2)}\n\n"
-        "Return a JSON object with these exact keys: "
-        "core-argument, assumptions, evidence-assessment, alternative-explanations, "
-        "methodological-critique, personal-relevance, future-directions, "
-        "critical-questions-enhanced, hypothesis-center."
-    )
-
-    client = openai.OpenAI(api_key=api_key, **({"base_url": base_url} if base_url else {}))
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": user_msg},
-        ],
-        response_format={"type": "json_object"},
-    )
-
-    node_content = json.loads(response.choices[0].message.content)
-    for node in canvas["nodes"]:
-        if node["id"] in node_content:
-            node["text"] = node_content[node["id"]]
-    return canvas
-
-
 def populate_nodes_from_note(note_text, canvas):
     """Basic section-to-node mapping without an API call. Best-effort regex extraction."""
     import re
@@ -264,13 +222,6 @@ def main():
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing file")
     parser.add_argument("--from-note", dest="from_note", metavar="NOTE_PATH",
                        help="Path to a generated literature note (.md) — populate canvas nodes from it")
-    parser.add_argument("--openai", action="store_true",
-                       help="Use an OpenAI-compatible API to populate canvas nodes from --from-note (requires OPENAI_API_KEY)")
-    parser.add_argument("--model", default="gpt-4o",
-                       help="Model name (default: gpt-4o). Use e.g. deepseek-chat for DeepSeek.")
-    parser.add_argument("--base-url", dest="base_url", default=None,
-                       help="API base URL for non-OpenAI providers (e.g. https://api.deepseek.com). "
-                            "Can also be set via OPENAI_BASE_URL env var.")
 
     args = parser.parse_args()
 
@@ -312,20 +263,8 @@ def main():
                 print(f"❌ Literature note not found: {note_path}", file=sys.stderr)
                 return 1
             note_text = note_path.read_text(encoding='utf-8')
-            if args.openai:
-                api_key = os.environ.get("OPENAI_API_KEY")
-                if not api_key:
-                    print("❌ OPENAI_API_KEY not set.", file=sys.stderr)
-                    print("   Export it first:  export OPENAI_API_KEY=sk-...", file=sys.stderr)
-                    return 1
-                base_url = args.base_url or os.environ.get("OPENAI_BASE_URL")
-                provider = base_url or "api.openai.com"
-                print(f"🤖 Populating canvas nodes via {provider} (model: {args.model})...")
-                canvas = populate_nodes_with_openai(note_text, canvas, args.model, api_key, base_url=base_url)
-                print("✅ Canvas nodes populated from literature note.")
-            else:
-                print("📝 Populating canvas nodes from note (section mapping, no API)...")
-                canvas = populate_nodes_from_note(note_text, canvas)
+            print("📝 Populating canvas nodes from note (section mapping)...")
+            canvas = populate_nodes_from_note(note_text, canvas)
 
         # Write canvas file
         output_path.parent.mkdir(parents=True, exist_ok=True)
