@@ -67,11 +67,11 @@ Reads the extracted markdown and loads the **clauderules template** from `script
 
 ### Canvas Creation (`canvas.py`)
 
-Produces a JSON file compatible with Obsidian Canvas plugin. The canvas has 9 fixed nodes (core argument, assumptions, evidence assessment, alternative explanations, methodological critique, personal relevance, future directions, critical questions, hypothesis center) with pre-defined spatial layout and wikilink-style connections.
+Produces a JSON file compatible with Obsidian Canvas plugin. The canvas has 9 fixed nodes (core argument, assumptions, evidence assessment, alternative explanations, methodological critique, personal relevance, future directions, critical questions, hypothesis center) with pre-defined spatial layout and labeled edges connecting nodes in a critical-thinking flow.
 
 ### Templates (`scripts/templates/`)
 
-- `clauderules.md` — 175+ line template defining the structured literature note format (YAML frontmatter, Dataview callouts, academic sections, wikilinks). Loaded via `importlib.resources` in `generate.py`.
+- `clauderules.md` — Instruction-driven template (~230 lines) defining the structured literature note format with anti-shallow protocol, evidence tables, and validity-mapped critique. Loaded via `importlib.resources` in `generate.py`.
 - `critical-thinking.canvas` — base canvas layout used by `canvas.py`.
 
 Both files must stay in `scripts/templates/` and are declared as `package_data` in `pyproject.toml`.
@@ -83,4 +83,4 @@ Both files must stay in `scripts/templates/` and are declared as `package_data` 
 - **Tesseract is optional** — the tool degrades gracefully if Tesseract is absent; only scanned PDFs are affected.
 - **`config/config.yaml` is documentation-only** — no scripts read this file at runtime. Extraction thresholds and paths are controlled via CLI flags and hardcoded constants in each script.
 - **All scripts are Python** — `setup.sh` and `batch.sh` were ported to `doctor.py` and `batch.py` so the CLI works after `pip install` (shell scripts were not in `package_data`).
-- **Skill-install-first** — `AGENTS.md` is the executable spec for installing this repo as a Claude Code skill. README leads with the one-line install path; pip is demoted to "Advanced".
+- **Plugin-install-first** — `/plugin install phd-deepread` is the preferred install path. `AGENTS.md` is the executable spec with two paths: plugin (preferred) and manual skill (fallback). There is no standalone pip-only path — the workflow requires Claude Code and Obsidian to deliver its value (structured notes + critical-thinking canvas).

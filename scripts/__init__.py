@@ -9,7 +9,7 @@ This package contains the core scripts for the PhD Deep Read Workflow:
 - phd_deepread.py: CLI entry point
 """
 
-__version__ = "0.1.6"
+__version__ = "0.2.1"
 __author__ = "Helen Insights"
 __email__ = "heleninsights@gmail.com"
 

@@ -165,3 +165,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Claude Code local
+.claude/
+skills/

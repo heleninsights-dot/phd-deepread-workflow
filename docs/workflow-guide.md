@@ -46,7 +46,7 @@ markdown_output/<paper_name>/
 
 ## Stage 2 — Structured note generation
 
-Claude Code writes the literature note. The template `scripts/templates/clauderules.md` (175+ lines) defines the required structure:
+Claude Code writes the literature note. The template `scripts/templates/clauderules.md` (~230 lines) defines the required structure with an anti-shallow protocol, evidence extraction tables, and validity-mapped critique:
 
 - **YAML frontmatter** — `category`, `tags`, `citekey`, `status`, `dateread`
 - **Dataview callouts** — `[!Citation]`, `[!Synthesis]`, `[!Metadata]`, `[!Abstract]`
@@ -64,15 +64,15 @@ See `examples/example-output.md` for a complete worked example.
 
 A 9-node JSON Canvas based on `scripts/templates/critical-thinking.canvas`:
 
-1. **core-argument** — primary claim and logical chain
-2. **assumptions** — explicit, implicit, questionable
-3. **evidence-assessment** — strong / moderate / weak evidence
-4. **alternative-explanations** — competing hypotheses, confounders
-5. **methodological-critique** — design and measurement limitations
-6. **personal-relevance** — connections to your existing work
-7. **future-directions** — short / medium / long-term research goals
-8. **critical-questions-enhanced** — falsifiability, mechanism, implementation
-9. **hypothesis-center** — central hypothesis with innovation/plausibility/evidence scores
+1. **core-argument** — primary claim, logical chain, argument type
+2. **assumptions** — explicit, implicit, and most questionable assumption
+3. **evidence-assessment** — strongest vs. weakest evidence, critical gaps, replication
+4. **alternative-explanations** — competing hypotheses, confounding, reverse causation
+5. **methodological-critique** — strongest design choice, most serious limitation, undiscussed gaps
+6. **personal-relevance** — direct connections to your work, what you can use now
+7. **future-directions** — immediate (1-2yr), medium-term (3-5yr), most important unanswered question
+8. **critical-questions-enhanced** — falsifiability, weakest argument, boundary conditions
+9. **hypothesis-center** — updated understanding, innovation/evidence/practical potential scores
 
 The canvas can be populated from a finished note via regex section mapping:
 

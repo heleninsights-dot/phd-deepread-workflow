@@ -6,30 +6,43 @@ If anything in this file conflicts with the README, follow this file — the REA
 
 ---
 
+## Prerequisites — confirm before installing
+
+Before any install, confirm the user has both:
+
+1. **Claude Code** — this workflow only works inside Claude Code. If the user doesn't have Claude Code, tell them to download it from claude.ai/code and stop here.
+2. **Obsidian** — the final output is a JSON canvas file that only renders in Obsidian. Without Obsidian, the user cannot visualize the paper. Point them to obsidian.md.
+
+If the user only wants AI help reading a PDF, they don't need this tool — just drag the PDF into any AI chat and ask questions directly. This workflow is for people who want structured literature notes and a critical-thinking canvas in Obsidian.
+
+---
+
 ## Goal
 
 After install, all of the following must succeed:
 
 1. The `phd-deepread` command runs from any directory.
-2. `phd-deepread doctor` (or `phd-deepread setup`) reports core dependencies as OK.
-3. The skill is discoverable to Claude Code at `~/.claude/skills/phd-deepread/SKILL.md`.
+2. `phd-deepread doctor` reports core dependencies as OK.
+3. The skill is available in Claude Code (via plugin or manual install).
+
+The end-to-end value: extract a PDF → Claude generates a structured literature note → the user opens a 9-node critical-thinking canvas in Obsidian to visualize the paper.
 
 ---
 
-## Install path A — Claude Code skill (preferred)
+## Install path A — Install in 30 seconds (fastest)
 
-Use this when the user is in Claude Code. It makes the skill load automatically in every future Claude Code session.
+Run these two commands inside Claude Code:
 
-### Step 1. Clone the repo into the user's skills directory
-
-```bash
-mkdir -p ~/.claude/skills
-git clone https://github.com/heleninsights-dot/phd-deepread-workflow.git ~/.claude/skills/phd-deepread
+```
+/plugin marketplace add heleninsights-dot/phd-deepread-workflow
+/plugin install phd-deepread@phd-deepread
 ```
 
-If `~/.claude/skills/phd-deepread` already exists, do **not** delete it. Run `git -C ~/.claude/skills/phd-deepread pull --ff-only` instead and tell the user you updated the existing install.
+The first command adds your repo as a marketplace source. The second installs the plugin from it. The skill is available immediately — no restart needed.
 
-### Step 2. Verify Python is available
+After the plugin is installed, continue with the steps below.
+
+### Step 1. Verify Python is available
 
 ```bash
 python3 --version
@@ -39,7 +52,7 @@ Required: Python 3.10 or higher. If missing or older:
 - macOS: suggest `brew install python@3.12` (do not run it without confirming).
 - Other OSes: point the user to https://www.python.org/downloads/ and stop here.
 
-### Step 3. Install the Python package (so the `phd-deepread` CLI is on PATH)
+### Step 2. Install the Python package (so the `phd-deepread` CLI is on PATH)
 
 ```bash
 python3 -m pip install --user phd-deepread-workflow
@@ -49,7 +62,7 @@ If the user is in a virtual environment (`$VIRTUAL_ENV` is set), drop `--user`.
 
 If `pip` complains about an externally-managed environment (PEP 668), retry with `--break-system-packages` only after confirming with the user, or create a venv at `~/.claude/skills/phd-deepread/.venv` and install into it.
 
-### Step 4. Install Tesseract OCR (optional — only needed for scanned PDFs)
+### Step 3. Install Tesseract OCR (optional — only needed for scanned PDFs)
 
 Ask the user: "Do you work with scanned PDFs (image-based, text not selectable)? [y/N]". Default no.
 
@@ -60,7 +73,7 @@ If yes:
 
 If no, skip — the workflow degrades gracefully without it.
 
-### Step 5. Verify the install
+### Step 4. Verify the install
 
 Run all three:
 
@@ -72,24 +85,25 @@ ls ~/.claude/skills/phd-deepread/SKILL.md
 
 All three must succeed. If `which phd-deepread` is empty, the user's shell PATH does not include the user-pip bin dir — add `export PATH="$HOME/.local/bin:$PATH"` to their shell rc (`~/.zshrc` on macOS default) and tell them to open a new terminal.
 
-### Step 6. Tell the user it's ready
+### Step 5. Tell the user it's ready
 
 Say (verbatim is fine):
 
-> Installed. In a new Claude Code session, drag a PDF into the chat and ask "process this paper with phd-deepread" — I'll do the rest.
+> Installed. In a new Claude Code session, drag a PDF into the chat and ask "phd-deepread read this paper" — I'll do the rest.
 
 ---
 
-## Install path B — Pip only (no Claude Code)
+## Install path B — Paste one line (just as easy)
 
-Use this when the user does not have Claude Code, or explicitly asks for the standalone CLI.
+Same result as path A — one sentence in Claude Code does the whole setup.
 
-```bash
-python3 -m pip install --user phd-deepread-workflow
-phd-deepread --help
+```
+Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
 ```
 
-Optional Tesseract install: same as path A, step 4.
+Claude Code clones the repo, finds SKILL.md, and installs it. Then continue with the pip install steps below.
+
+If the repo is already installed, the agent will detect it and update instead.
 
 ---
 

@@ -8,13 +8,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- None
+- **Claude Code Plugin support** — `.claude-plugin/` with `plugin.json` and `marketplace.json` for `/plugin marketplace add` and `/plugin install` workflow
+- **Manual skill install files** — `skills/deepread/SKILL.md` for users who prefer manual skill install over plugin
+- **Chinese README** — `README.zh-CN.md` translation for Chinese-speaking researchers (linked from main README)
+- **Prerequisites section** — both AGENTS.md and README now explicitly check for Claude Code + Obsidian before install; AGENTS.md tells users who only want AI help reading a PDF they don't need this tool
+- **Bush epigraph** — README opens with the Vannevar Bush "As We May Think" quote placing the workflow in the tradition of associative trails
+- **Output expectations table** — README now includes a structured table showing exactly what the literature note extracts (findings with stats, methodology details, critique mapped to validity types, wikilinks, action items, scored assessment)
+- **Anti-Shallow Protocol** — clauderules template now enforces concrete output with banned phrases, mandatory practices (numbers over adjectives, named entities, verbatim quoting, noting absent data), minimum 25 wikilinks, and 3-bullet-per-section minimums
+- **Three-phase task structure** — clauderules now splits work into EXTRACTION → ANALYSIS → OUTPUT phases so Claude collects all concrete data before writing
+- **ANALYSIS phase** — new middle phase in clauderules requiring explicit critical evaluation of evidence support, assumptions, alternative explanations, and validity threats before writing the note
+- **Wikilink count warning** — verify.py now alerts when wikilink count is below 15, recommending 25+ for dense concept linking
+- **Canvas node derivation** — `populate_nodes_from_note()` now derives assumptions and alternative-explanations nodes from populated content when they are not directly mappable from the note
+- **Canvas truncation** — long sections (>800 chars) are now truncated in canvas nodes with a pointer to the full literature note
 
 ### Changed
-- None
+- **Repositioned as Claude Code skill** — removed the standalone-pip focus; install flow now leads with `/plugin install` and manual skill install
+- **Removed OpenAI integration** — `--openai`, `--model`, `--base-url` flags removed from generate, canvas, and run commands; workflow returns to Claude-Code-native model (Claude does the writing)
+- **AGENTS.md rewritten** — restructured as executable spec with prerequisites check, two install paths (30-second plugin → manual fallback), and end-to-end value statement
+- **README rewritten** — prerequisite callout, simplified dual install paths, Bush epigraph, output structure table, CLI reference table
+- **clauderules template overhauled** (~224 lines changed) — replaced generic placeholders with specific extraction requirements (sample sizes, instruments, p-values, CIs, effect sizes), added explicit role definition, and mandated concrete data over adjectives
+- **Canvas nodes rewritten** — all 9 node templates upgraded from generic numbered placeholders to focused annotation prompts (e.g. "The single piece of evidence that carries the most weight, with numbers", "Which assumption, if wrong, would most damage the conclusions?")
+- **Canvas section mapping expanded** — `populate_nodes_from_note()` now maps Problem Context, Study Characteristics, Open Questions, Integration, and Final Assessment sections from the updated note structure
+- **generate.py prompt sharpened** — emphasizes evidence-density and explicit data extraction from the paper text
+- **Hypothesis center node** — replaced Innovation/Plausibility/Evidence scores with Innovation/Evidence Strength/Practical Potential to better serve research decision-making
+- **verify.py** — added wikilink count warning threshold (below 15)
+- **AGENTS.md install paths** — renamed from "Install path A / B" to "30 seconds (fastest)" and "Paste one line (just as easy)" for clearer user guidance
+- **SKILL.md** — synced with plugin metadata to reference phd-deepread.read
 
 ### Fixed
-- None
+- Canvas next-steps message now guides users to "review and refine" prompts rather than "fill in" from scratch (nodes now contain annotation prompts, not blanks)
+- Section map in `populate_nodes_from_note()` now uses proper word-boundary regex to avoid partial section name matches
 
 ---
 

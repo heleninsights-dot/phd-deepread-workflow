@@ -21,13 +21,13 @@ import importlib.resources
 def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
     """Create a canvas template with 9 critical-thinking nodes."""
 
-    # Base template with placeholder content
+    # Base template with annotation prompts
     canvas = {
         "nodes": [
             {
                 "id": "core-argument",
                 "type": "text",
-                "text": "# Core Argument Structure\n\n**Primary Claim:** [State the paper's central claim]\n\n**Logical Chain:**\n1. [First premise or evidence]\n2. [Second premise or evidence]\n3. [Third premise or evidence]\n4. **Therefore:** [Conclusion]\n\n**Argument Type:** [e.g., Hypothetical synthesis, causal inference, mechanistic explanation]",
+                "text": "# Core Argument\n\n**Primary Claim:** [The paper's central claim — one sentence]\n\n**Logical Chain:**\n1. [Premise / evidence 1]\n2. [Premise / evidence 2]\n3. [Premise / evidence 3]\n→ **Therefore:** [Conclusion]\n\n**Argument Type:** [Causal / mechanistic / correlational / descriptive]\n\n**Strongest Evidence:** [The single piece of evidence that carries the most weight, with numbers]",
                 "x": -1320,
                 "y": -960,
                 "width": 700,
@@ -37,7 +37,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "assumptions",
                 "type": "text",
-                "text": "# Key Assumptions\n\n**Explicit Assumptions:**\n1. [Assumption 1]\n2. [Assumption 2]\n3. [Assumption 3]\n\n**Implicit Assumptions:**\n1. [Hidden assumption 1]\n2. [Hidden assumption 2]\n3. [Hidden assumption 3]\n\n**Questionable Assumptions:**\n1. [Potentially problematic assumption 1]\n2. [Potentially problematic assumption 2]\n3. [Potentially problematic assumption 3]",
+                "text": "# Key Assumptions\n\n**Explicit Assumptions:**\n1. [Assumption the authors state — quote if possible]\n2. [Another stated assumption]\n\n**Implicit Assumptions:**\n1. [Hidden assumption needed for the argument to work]\n2. [Another unstated assumption]\n\n**Most Questionable:** [Which assumption, if wrong, would most damage the conclusions? Why?]",
                 "x": -1320,
                 "y": -400,
                 "width": 700,
@@ -47,7 +47,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "evidence-assessment",
                 "type": "text",
-                "text": "# Evidence Strength Assessment\n\n**Strongest Evidence:**\n• [Evidence 1]\n• [Evidence 2]\n• [Evidence 3]\n\n**Moderate Evidence:**\n• [Evidence 4]\n• [Evidence 5]\n• [Evidence 6]\n\n**Weakest Evidence:**\n• [Evidence 7]\n• [Evidence 8]\n• [Evidence 9]\n\n**Critical Gap:** [The most important missing evidence]",
+                "text": "# Evidence Assessment\n\n**Strongest Evidence:**\n• [Finding with statistical support]\n• [Finding with statistical support]\n\n**Weakest Evidence:**\n• [Finding and why it's weak]\n\n**Critical Gap:** [The most important missing evidence]\n\n**Replication:** [Are key findings replicated within the paper? Across other papers?]\n\n**Validity Concerns:** [Internal / external / construct / statistical conclusion — which are threatened?]",
                 "x": -1360,
                 "y": 350,
                 "width": 700,
@@ -57,7 +57,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "alternative-explanations",
                 "type": "text",
-                "text": "# Alternative Explanations & Pathways\n\n**Independent Effects Model:**\n[Describe how observed effects might be independent rather than connected]\n\n**Common Mechanism Model:**\n[Describe alternative underlying mechanisms]\n\n**Placebo/Non-specific Effects:**\n[Describe potential non-specific effects]\n\n**Confounding Factors:**\n• [Confounding factor 1]\n• [Confounding factor 2]\n• [Confounding factor 3]\n\n**Competing Hypotheses:**\n• [Alternative hypothesis 1]\n• [Alternative hypothesis 2]\n• [Alternative hypothesis 3]",
+                "text": "# Alternative Explanations\n\n**Competing Hypotheses:**\n1. [Alternative explanation 1]\n2. [Alternative explanation 2]\n\n**Could Confounding Explain This?**\n[Most serious confound and whether the design controls for it]\n\n**Reverse Causation Risk:**\n[Could the effect run in the opposite direction?]\n\n**Plausibility vs. Authors' Claim:**\n[Are the alternatives MORE or LESS plausible? Why?]",
                 "x": -360,
                 "y": 50,
                 "width": 800,
@@ -67,7 +67,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "methodological-critique",
                 "type": "text",
-                "text": "# Methodological Limitations\n\n**Study Design Issues:**\n• [Design issue 1]\n• [Design issue 2]\n• [Design issue 3]\n\n**Model/System Concerns:**\n• [Model limitation 1]\n• [Model limitation 2]\n• [Model limitation 3]\n\n**Translation Challenges:**\n• [Translation challenge 1]\n• [Translation challenge 2]\n• [Translation challenge 3]\n\n**Measurement Issues:**\n• [Measurement problem 1]\n• [Measurement problem 2]\n• [Measurement problem 3]",
+                "text": "# Methodological Critique\n\n**Strongest Design Choice:**\n[Specific choice + why it strengthens the evidence]\n\n**Most Serious Limitation:**\n[Limitation + which validity it threatens: internal/external/construct/statistical conclusion]\n\n**Limitations NOT Discussed by Authors:**\n[At least one gap the authors don't acknowledge]\n\n**Statistical Concerns:**\n[Power, multiplicity, model assumptions, p-hacking risk]\n\n**Design Alternatives:**\n[What design would have been stronger, and why wasn't it used?]",
                 "x": 640,
                 "y": -950,
                 "width": 700,
@@ -77,7 +77,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "personal-relevance",
                 "type": "text",
-                "text": "# Personal Relevance & Connections\n\n**Research Interests Alignment:**\n• [Connection to interest 1]\n• [Connection to interest 2]\n• [Connection to interest 3]\n\n**Connections to My Work:**\n• [[Related concept 1]]\n• [[Related concept 2]]\n• [[Related concept 3]]\n\n**Critical Thinking Development:**\n• [What this paper teaches about critical thinking]\n• [Methodological lessons]\n• [Conceptual insights]\n\n**Learning Points:**\n• [Key takeaway 1]\n• [Key takeaway 2]\n• [Key takeaway 3]",
+                "text": "# Personal Relevance\n\n**Connections to My Research:**\n• [Specific link to your work — a shared mechanism, method, or question]\n• [Another connection]\n\n**What I Can Use Directly:**\n• [Method / protocol / finding you can apply now]\n\n**What This Changes for Me:**\n[Does this support, challenge, or complicate your existing understanding?]",
                 "x": 720,
                 "y": -200,
                 "width": 700,
@@ -87,7 +87,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "future-directions",
                 "type": "text",
-                "text": "# Future Research Directions\n\n**Immediate Next Steps (1-2 years):**\n1. [Step 1]\n2. [Step 2]\n3. [Step 3]\n\n**Medium-term Goals (3-5 years):**\n1. [Goal 1]\n2. [Goal 2]\n3. [Goal 3]\n\n**Long-term Vision (5+ years):**\n1. [Vision 1]\n2. [Vision 2]\n3. [Vision 3]\n\n**High-Impact Studies Needed:**\n• [Study type 1]\n• [Study type 2]\n• [Study type 3]",
+                "text": "# Future Research Directions\n\n**Immediate (1-2 years):**\n1. [Specific follow-up study]\n2. [Specific follow-up study]\n\n**Medium-term (3-5 years):**\n1. [Research program direction]\n\n**Long-term Vision (5+ years):**\n1. [Field-level direction]\n\n**The Most Important Unanswered Question:**\n[One question + what study design would answer it]",
                 "x": 640,
                 "y": 400,
                 "width": 700,
@@ -97,7 +97,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "critical-questions-enhanced",
                 "type": "text",
-                "text": "# Enhanced Critical Questions\n\n**For Hypothesis Testing:**\n1. What would falsify the hypothesis?\n2. Are there boundary conditions?\n3. What's the minimal evidence needed for confidence?\n\n**For Mechanism Elucidation:**\n1. Which mechanisms are most critical?\n2. Does timing/sequence matter?\n3. Are there synergistic/antagonistic effects?\n\n**For Clinical/Applied Implementation:**\n1. Cost-effectiveness compared to alternatives?\n2. Practical implementation barriers?\n3. How to measure outcomes effectively?\n\n**For Scientific Field:**\n1. Does this challenge current paradigms?\n2. What similar approaches could be explored?\n3. How to balance basic vs. translational research?",
+                "text": "# Critical Questions\n\n**What Would Falsify the Hypothesis?**\n[Specific result that would prove it wrong]\n\n**Where Is the Argument Weakest?**\n[The step in the logical chain with least support]\n\n**What Are the Boundary Conditions?**\n[When / where / for whom does this NOT apply?]\n\n**What's the Minimum Evidence for Confidence?**\n[What would it take for you to believe this conclusion?]\n\n**Does This Challenge a Paradigm?**\n[Does it overturn, refine, or confirm existing understanding?]",
                 "x": -860,
                 "y": 1280,
                 "width": 1640,
@@ -107,7 +107,7 @@ def create_canvas_template(paper_title="", paper_authors="", paper_year=""):
             {
                 "id": "hypothesis-center",
                 "type": "text",
-                "text": f"# Central Hypothesis Re-examined\n\n**{paper_title if paper_title else 'Paper Title'}**\n{'**' + paper_authors + ' (' + paper_year + ')**' if paper_authors and paper_year else ''}\n\n**Innovation Score:** [High/Medium/Low]\n• [Reason 1]\n• [Reason 2]\n• [Reason 3]\n\n**Plausibility Score:** [High/Medium/Low]\n• [Reason 1]\n• [Reason 2]\n• [Reason 3]\n\n**Evidence Score:** [High/Medium/Low]\n• [Reason 1]\n• [Reason 2]\n• [Reason 3]",
+                "text": f"# Central Hypothesis Re-examined\n\n**{paper_title if paper_title else 'Paper Title'}**\n{'**' + paper_authors + ' (' + paper_year + ')**' if paper_authors and paper_year else ''}\n\n**Updated Understanding:** [Your synthesis after critically examining all angles]\n\n**Innovation:** [High/Medium/Low] — [Why?]\n**Evidence Strength:** [High/Medium/Low] — [Why?]\n**Practical Potential:** [High/Medium/Low] — [Why?]\n\n**Remaining Uncertainties:** [What you still don't know or fully trust]",
                 "fontSize": 16,
                 "x": -300,
                 "y": -760,
@@ -185,12 +185,13 @@ def populate_nodes_from_note(note_text, canvas):
     import re
 
     section_map = {
-        r"(?:Research Gap|Hypothesis|Central Hypothesis)(.*?)(?=\n## |\Z)": "core-argument",
-        r"(?:Methodology|Evidence Base|Key Techniques)(.*?)(?=\n## |\Z)": "evidence-assessment",
+        r"(?:Research Gap|Hypothesis|Central Hypothesis|Problem Context)(.*?)(?=\n## |\Z)": "core-argument",
+        r"(?:Methodology|Evidence Base|Key Techniques|Study Characteristics)(.*?)(?=\n## |\Z)": "evidence-assessment",
         r"(?:Critical Analysis|Strengths|Limitations)(.*?)(?=\n## |\Z)": "methodological-critique",
-        r"(?:Connections|Personal Relevance)(.*?)(?=\n## |\Z)": "personal-relevance",
-        r"(?:Action Items|Next Steps|Future)(.*?)(?=\n## |\Z)": "future-directions",
-        r"(?:Summary|Conclusion|Key Takeaway)(.*?)(?=\n## |\Z)": "hypothesis-center",
+        r"(?:Open Questions)(.*?)(?=\n## |\Z)": "critical-questions-enhanced",
+        r"(?:Connections|Integration|Personal Relevance)(.*?)(?=\n## |\Z)": "personal-relevance",
+        r"(?:Action Items|Next Steps)(.*?)(?=\n## |\Z)": "future-directions",
+        r"(?:Summary|Conclusion|Key Takeaway|Final Assessment)(.*?)(?=\n## |\Z)": "hypothesis-center",
     }
 
     node_text = {node["id"]: node["text"] for node in canvas["nodes"]}
@@ -200,7 +201,26 @@ def populate_nodes_from_note(note_text, canvas):
         if match:
             extracted = match.group(0).strip()
             if len(extracted) > 50:
+                # Truncate very long sections for canvas display
+                if len(extracted) > 800:
+                    extracted = extracted[:800] + "\n\n[...truncated for canvas — see full literature note]"
                 node_text[node_id] = extracted
+
+    # Derive assumptions and alternative-explanations from the populated nodes
+    # assumptions: pull from core-argument's hypothesis and methodology critique
+    if node_text.get("core-argument"):
+        arg_text = node_text["core-argument"]
+        # Extract hypothesis-related content as proxy for assumptions
+        hypo_match = re.search(r"(?:Central Hypothesis|Hypothesis|Implicit:)(.*?)(?=\n###|\n##|\Z)", arg_text, re.DOTALL | re.IGNORECASE)
+        if hypo_match and len(hypo_match.group(0)) > 30:
+            node_text["assumptions"] = "# Assumptions (derived from hypothesis)\n\n**Central Hypothesis from Note:**\n" + hypo_match.group(0).strip()[:500]
+
+    # alternative-explanations: derive from methodological critique — refine in Obsidian if needed
+    if node_text.get("methodological-critique"):
+        crit_text = node_text["methodological-critique"]
+        alt_match = re.search(r"(?:Limitations|not discussed|threat to)(.*?)(?=\n###|\n##|\Z)", crit_text, re.DOTALL | re.IGNORECASE)
+        if alt_match and len(alt_match.group(0)) > 30:
+            node_text["alternative-explanations"] = "# Alternative Explanations (derived from critique)\n\n**From Limitations Analysis:**\n" + alt_match.group(0).strip()[:500]
 
     for node in canvas["nodes"]:
         if node["id"] in node_text:
@@ -293,7 +313,7 @@ def main():
         print()
         print("📋 Next steps:")
         print("  1. Open the canvas in Obsidian (with Canvas plugin)")
-        print("  2. Fill in each node with your critical analysis")
+        print("  2. Review and refine each node — the prompts inside guide your critical analysis")
         print("  3. Adjust positions, colors, and connections as needed")
         print("  4. Use the json-canvas skill for further editing")
 

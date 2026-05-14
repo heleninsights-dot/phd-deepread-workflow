@@ -156,7 +156,7 @@ def create_claude_prompt(extracted_text, template, paper_info):
     # Replace template placeholders with actual info
     prompt_template = f"""# Structured Literature Note Generation
 
-I need you to generate a structured literature note for the following academic paper using the `.clauderules` template.
+I need you to generate a structured, evidence-dense literature note for the following academic paper. The `.clauderules` template below contains both format specifications and content quality requirements. Follow ALL instructions in the template.
 
 ## Paper Information
 - **Title**: {paper_info.get('title', 'Unknown Title')}
@@ -177,14 +177,14 @@ Below is the raw text extracted from the PDF (via Text-First decision tree using
 ## Template to Follow
 You MUST follow this exact `.clauderules` template:
 
-```yaml
+```
 {template}
 ```
 
 ## Instructions
 1. Read the extracted PDF content above
 2. Apply the `.clauderules` template exactly as shown
-3. Fill in all template placeholders with information from the paper
+3. Follow the content requirements for each section -- extract specific numerical data, statistical results, instrument names, and methodological details from the paper
 4. Generate a comprehensive literature note in raw Markdown format
 5. Include YAML frontmatter, Dataview callouts, and all required sections
 6. Use [[Wikilinks]] extensively for key concepts, methods, proteins, etc.
