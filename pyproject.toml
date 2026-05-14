@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phd-deepread-workflow"
-version = "0.2.0"
+version = "0.2.1"
 description = "Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian"
 readme = "README.md"
 authors = [

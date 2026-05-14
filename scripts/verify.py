@@ -258,6 +258,8 @@ def check_structured_note(note_path):
         if wikilink_count > 0:
             checks["has_wikilinks"] = True
             print(f"  ✓ Wikilinks: {wikilink_count} found")
+            if wikilink_count < 15:
+                print(f"  ⚠ Wikilink count is low ({wikilink_count}); recommend 25+ for dense concept linking")
 
         # Check for major sections
         required_sections = [

@@ -183,9 +183,9 @@ class TestCriticalThinkingCanvasStructure:
                 text = node["text"]
                 # Some nodes might reference the paper title
                 if node["id"] == "core-argument":
-                    assert "[State the paper's central claim]" in text
+                    assert "Primary Claim" in text
                 elif node["id"] == "assumptions":
-                    assert "[Assumption 1]" in text
+                    assert "Explicit Assumptions" in text
 
     def test_canvas_layout(self):
         """Test that nodes are positioned to avoid overlap."""

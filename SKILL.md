@@ -1,6 +1,6 @@
 ---
 name: phd-deepread
-description: Process academic PDFs into structured Obsidian literature notes and 9-node critical-thinking canvases. Activate when the user shares a PDF (drag-in or path) and asks to read, summarize, analyze, or "deeply read" it — or when they say things like "process this paper", "make a literature note", "critique this paper", or "build a canvas for this paper".
+description: Process academic PDFs into structured Obsidian literature notes and 9-node critical-thinking canvases. Activate when the user shares a PDF (drag-in or path) and asks to read, summarize, analyze, or "deeply read" it — or when they say things like "phd-deepread read this paper", "make a literature note", "critique this paper", or "build a canvas for this paper".
 tags: [pdf, academic, research, obsidian, literature-review]
 allowed-tools: [Bash, Write, Read, Edit, Glob, Grep]
 ---
@@ -17,7 +17,7 @@ Turn a PDF into three artifacts the user can drop straight into Obsidian:
 
 The user shares an academic PDF — typically by dragging it into the chat or pasting a path — and asks for any of:
 
-- "process this paper" / "deep read this" / "read this and make a note"
+- "phd-deepread read this paper" / "deep read this" / "read this and make a note"
 - "summarize this paper" / "give me a literature note"
 - "critique this" / "build a critical-thinking canvas"
 - "batch-process this folder of PDFs"
@@ -48,7 +48,7 @@ phd-deepread canvas -o markdown_output/<paper>/<paper>.canvas \
   --from-note structured_literature_notes/<paper>.md --overwrite
 ```
 
-This maps note sections to canvas nodes by regex. The canvas still needs the user (or you) to fill in the unmapped placeholder bullets.
+This maps note sections to canvas nodes by regex. Some nodes (assumptions, alternative-explanations) are auto-populated from related sections; the rest pull directly from the note. The user can refine any node in Obsidian.
 
 ### Step by step (when the user wants control)
 
