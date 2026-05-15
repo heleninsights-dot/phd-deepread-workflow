@@ -1,0 +1,12 @@
+{
+  "name": "phd-deepread",
+  "description": "Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian",
+  "version": "0.2.1",
+  "author": {
+    "name": "Helen Insights",
+    "email": "heleninsights@gmail.com"
+  },
+  "homepage": "https://github.com/heleninsights-dot/phd-deepread-workflow",
+  "repository": "https://github.com/heleninsights-dot/phd-deepread-workflow",
+  "license": "MIT"
+}
