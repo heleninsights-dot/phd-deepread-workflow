@@ -32,38 +32,15 @@ Bush 在 1945 年就设想了这样一张书桌——你所有的阅读内容都
 
 ---
 
-## 安装
+## 30 秒安装
 
-### 选项 1：30 秒安装（最快）
-
-在 Claude Code 中运行：
-
-```
-/plugin marketplace add heleninsights-dot/phd-deepread-workflow
-/plugin install phd-deepread@phd-deepread
-```
-
-然后在终端安装将 PDF 转换为 Markdown 的 Python CLI：
-
-```bash
-pip install phd-deepread-workflow
-```
-
-完成。将 PDF 拖入 Claude Code 并说 **"phd-deepread read this paper"**。
-
-### 选项 2：粘贴一行命令（同样简单）
-
-将此粘贴到 Claude Code 中，它会处理一切：
+将此粘贴到 Claude Code 中：
 
 ```
 Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
 ```
 
-然后在终端安装 Python CLI：
-
-```bash
-pip install phd-deepread-workflow
-```
+Claude Code 会自动安装技能、Python CLI 及所有依赖。完成。将 PDF 拖入 Claude Code 并说 **"phd-deepread read this paper"**。
 
 ### 可选：Tesseract OCR
 

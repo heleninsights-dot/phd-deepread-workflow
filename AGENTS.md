@@ -29,18 +29,17 @@ The end-to-end value: extract a PDF → Claude generates a structured literature
 
 ---
 
-## Install path A — Install in 30 seconds (fastest)
+## Install in 30 seconds
 
-Run these two commands inside Claude Code:
+Paste this into Claude Code and it handles everything:
 
 ```
-/plugin marketplace add heleninsights-dot/phd-deepread-workflow
-/plugin install phd-deepread@phd-deepread
+Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
 ```
 
-The first command adds your repo as a marketplace source. The second installs the plugin from it. The skill is available immediately — no restart needed.
+Claude Code clones the repo, finds SKILL.md, and installs the skill. If the repo is already installed, it will detect it and update instead.
 
-After the plugin is installed, continue with the steps below.
+Once the skill is installed, continue with the steps below.
 
 ### Step 1. Verify Python is available
 
@@ -90,20 +89,6 @@ All three must succeed. If `which phd-deepread` is empty, the user's shell PATH 
 Say (verbatim is fine):
 
 > Installed. In a new Claude Code session, drag a PDF into the chat and ask "phd-deepread read this paper" — I'll do the rest.
-
----
-
-## Install path B — Paste one line (just as easy)
-
-Same result as path A — one sentence in Claude Code does the whole setup.
-
-```
-Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
-```
-
-Claude Code clones the repo, finds SKILL.md, and installs it. Then continue with the pip install steps below.
-
-If the repo is already installed, the agent will detect it and update instead.
 
 ---
 

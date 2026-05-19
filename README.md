@@ -32,38 +32,15 @@ If you just want AI help reading a PDF, you don't need this workflow. Drag the P
 
 ---
 
-## Install
+## Install in 30 seconds
 
-### Option 1: Install in 30 seconds (fastest)
-
-In Claude Code, run:
-
-```
-/plugin marketplace add heleninsights-dot/phd-deepread-workflow
-/plugin install phd-deepread@phd-deepread
-```
-
-Then in your terminal, install the Python CLI that converts PDFs to Markdown:
-
-```bash
-pip install phd-deepread-workflow
-```
-
-Done. Drag a PDF into Claude Code and say **"phd-deepread read this paper"**.
-
-### Option 2: Paste one line (just as easy)
-
-Paste this into Claude Code and it handles everything:
+Paste this into Claude Code:
 
 ```
 Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
 ```
 
-Then in your terminal, install the Python CLI:
-
-```bash
-pip install phd-deepread-workflow
-```
+Claude Code installs the skill, the Python CLI, and everything else automatically. Done. Drag a PDF into Claude Code and say **"phd-deepread read this paper"**.
 
 ### Optional: Tesseract OCR
 
