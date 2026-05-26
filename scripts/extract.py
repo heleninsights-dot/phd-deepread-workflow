@@ -19,6 +19,8 @@ from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 import tempfile
 import shutil
+import re as _re
+import re
 
 # Try to import required libraries
 try:

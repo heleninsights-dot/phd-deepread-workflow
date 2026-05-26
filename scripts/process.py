@@ -64,12 +64,31 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Run full PhD Deep Read pipeline: extract → generate prompt → canvas"
     )
-    parser.add_argument("pdf_path", help="Path to the PDF file")
+    parser.add_argument("pdf_path", help="Path to the PDF file or a directory of PDFs")
     parser.add_argument(
         "--notes-dir",
         default="structured_literature_notes",
         help="Output directory for notes and canvas (default: structured_literature_notes)",
     )
+    parser.add_argument(
+        "--create-canvases",
+        action="store_true",
+        default=True,
+        help="Create canvas templates (default: True)",
+    )
     args = parser.parse_args()
 
-    sys.exit(run_all(args.pdf_path, notes_dir=args.notes_dir))
+    input_path = Path(args.pdf_path)
+    if input_path.is_dir():
+        # Folder → delegate to batch
+        from scripts.batch import main as batch_main
+        saved_argv = sys.argv
+        sys.argv = ["batch", str(input_path), "-o", args.notes_dir]
+        if args.create_canvases:
+            sys.argv.append("--create-canvases")
+        try:
+            sys.exit(batch_main())
+        finally:
+            sys.argv = saved_argv
+    else:
+        sys.exit(run_all(args.pdf_path, notes_dir=args.notes_dir))

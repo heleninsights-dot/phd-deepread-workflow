@@ -25,6 +25,7 @@ def main():
         "generate": "generate.py",
         "canvas": "canvas.py",
         "run": "process.py",
+        "read": "process.py",  # alias for natural-language usage
         "batch": "batch.py",
         "verify": "verify.py",
         "guide": "show_guide",
@@ -93,7 +94,7 @@ Commands:
   extract     Extract text/images from PDFs (PyMuPDF + Tesseract OCR fallback)
   generate    Build a literature-note prompt from extracted text — paste into Claude Code
   canvas      Create a 9-node JSON Canvas; --from-note populates nodes from a finished note
-  run         Run full pipeline: extract → generate prompt → canvas
+  run         Run full pipeline: extract → generate prompt → canvas (alias: read)
   batch       Batch process multiple PDFs
   verify      Verify output quality and consistency
   guide       Show workflow guide and documentation
