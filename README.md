@@ -3,7 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI version](https://badge.fury.io/py/phd-deepread-workflow.svg)](https://pypi.org/project/phd-deepread-workflow/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-6E56CF)](https://claude.com/claude-code)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Skill-6E56CF)](https://claude.com/claude-code)
+[![Codex Skill](https://img.shields.io/badge/Codex-Skill-000000)](https://openai.com/codex)
 [![中文版本](https://img.shields.io/badge/README-%E4%B8%AD%E6%96%87%E7%89%88-green)](README.zh-CN.md)
 
 > Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian.
@@ -25,7 +26,7 @@ Bush imagined this in 1945 — a desk where all your reading lives outside its o
 
 You need both of these:
 
-- **Claude Code** — [download here](https://claude.com/claude-code) if you don't have it yet. This workflow only works inside Claude Code.
+- **A skill-capable AI coding agent** — either **Claude Code** ([download here](https://claude.com/claude-code)) or **Codex**. This workflow installs as a skill in whichever one you use.
 - **Obsidian** — [download here](https://obsidian.md). The final output is a JSON canvas file that only renders in Obsidian.
 
 If you just want AI help reading a PDF, you don't need this workflow. Drag the PDF into any AI chat and ask questions directly. This workflow is for people who want structured literature notes and a critical-thinking canvas they can revisit in Obsidian.
@@ -34,13 +35,13 @@ If you just want AI help reading a PDF, you don't need this workflow. Drag the P
 
 ## Install in 30 seconds
 
-Paste this into Claude Code:
+Paste this into **Claude Code** or **Codex**:
 
 ```
 Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
 ```
 
-Claude Code installs the skill, the Python CLI, and everything else automatically. Done. Drag a PDF into Claude Code and say **"phd-deepread read this paper"**.
+Your agent installs the skill, the Python CLI, and everything else automatically. The skill lands in that agent's skills folder (`~/.claude/skills/` for Claude Code, `~/.codex/skills/` for Codex) — restart the agent if it asks you to. Done. Drag a PDF in and say **"phd-deepread read this paper"**.
 
 ### Optional: Tesseract OCR
 
@@ -57,21 +58,21 @@ sudo apt install tesseract-ocr  # Ubuntu/Debian
 
 ### One paper
 
-Drag a PDF into Claude Code and say:
+Drag a PDF into Claude Code or Codex and say:
 
 > **phd-deepread read this paper**
 
-Claude extracts the text, writes a structured literature note, and creates a 9-node critical-thinking canvas — all in one go. Open the `.canvas` file in Obsidian to visualize arguments, evidence, assumptions, and gaps side by side.
+Your agent extracts the text, writes a structured literature note, and creates a 9-node critical-thinking canvas — all in one go. Open the `.canvas` file in Obsidian to visualize arguments, evidence, assumptions, and gaps side by side.
 
 You can also ask for specific parts: *"phd-deepread extract this PDF, but just give me the prompt — I'll write the note myself."*
 
 ### A folder of papers
 
-Drag a folder into Claude Code and say:
+Drag a folder into Claude Code or Codex and say:
 
 > **phd-deepread read this folder**
 
-Claude batch-processes every PDF inside — extracting text, writing a structured literature note for each one, and creating canvas templates. Already-processed papers are skipped automatically. Works the same as a single paper, just for the whole folder.
+Your agent batch-processes every PDF inside — extracting text, writing a structured literature note for each one, and creating canvas templates. Already-processed papers are skipped automatically. Works the same as a single paper, just for the whole folder.
 
 ---
 
@@ -102,7 +103,7 @@ The note doesn't summarize — it pulls out the specific data you need to actual
 
 ## CLI reference
 
-Claude Code calls these commands for you — you don't need to type them yourself:
+Your agent (Claude Code or Codex) calls these commands for you — you don't need to type them yourself:
 
 | Command | What it does |
 |---------|-------------|
