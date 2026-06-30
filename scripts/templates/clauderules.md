@@ -11,6 +11,7 @@ This is NOT a summary. A summary tells someone what the paper is about. A litera
 Read the extracted paper text and produce a structured literature note. Your task has three phases, in order:
 
 **Phase 1 -- EXTRACTION.** Before you write anything, identify and record the following concrete data from the paper:
+
 - Exact sample size(s), subgroups, and any attrition/dropout
 - Study design name (not a generic category -- the specific design the authors used)
 - Every instrument, assay, software package, and statistical test, with version/model numbers if given
@@ -20,6 +21,7 @@ Read the extracted paper text and produce a structured literature note. Your tas
 - Every limitation the authors acknowledge AND any they do not
 
 **Phase 2 -- ANALYSIS.** With the extracted data in hand, critically evaluate:
+
 - Does the evidence actually support the central claim? Where is it strongest/weakest?
 - What assumptions (explicit and implicit) must hold for the conclusions to be valid?
 - What alternative explanations could account for the findings?
@@ -32,7 +34,9 @@ Read the extracted paper text and produce a structured literature note. Your tas
 The following rules are non-negotiable. Violating any of them produces an unusable note.
 
 ### BANNED PHRASES
+
 Never write any of the following (or close variants):
+
 - "The study found significant results" (what results? what significance level?)
 - "Various factors were associated with..." (which factors? associated how?)
 - "The methodology was robust" (in what specific way? what makes it robust?)
@@ -42,10 +46,11 @@ Never write any of the following (or close variants):
 - "Further research is needed" (what specific research? why?)
 
 ### MANDATORY PRACTICES
+
 1. **Numbers over adjectives.** If the paper reports a number, you report that number. Never replace "p = 0.003, d = 0.72" with "a significant effect."
 2. **Named entities.** Every method, instrument, protocol, molecule, protein, drug, disease, and statistical test must be named explicitly. Use full names on first mention (e.g., "enzyme-linked immunosorbent assay (ELISA)").
 3. **Verbatim quoting.** When the paper states its hypothesis, research question, or key conclusion in a clear sentence, quote it directly inside quotation marks and cite the section/paragraph.
-4. **Absence noted, cleanly.** When the paper does not report sample size, p-values, confidence intervals, or effect sizes: use "NA" in the table cell. Do NOT write "[Paper does not report X]" inside individual table cells — it creates visual clutter. Instead, put a single consolidated `> **Note on missing data**:` blockquote directly under the table explaining what's missing and where to find it (e.g., "for precise effect sizes refer to the original studies").
+4. **Absence noted.** If the paper does not report sample size, p-values, confidence intervals, or effect sizes where you would expect them, explicitly note: "[Paper does not report X]".
 5. **Wikilink everything technical.** Every named method, protein, gene, drug, disease, statistical technique, and conceptual framework must be wrapped in [[wikilinks]].
 6. **Minimum 25 wikilinks.** Your output must contain at least 25 distinct [[wikilinks]].
 7. **Section minimums.** Each of the 7 main sections must contain at least 3 substantive bullet points or paragraphs.
@@ -53,6 +58,7 @@ Never write any of the following (or close variants):
 ## Output Constraints
 
 ### Format Requirements
+
 1. **Output ONLY the completed Markdown note.** No preamble, no "here is the note," no commentary.
 2. **YAML frontmatter** must use the exact fields shown in the template below.
 3. **Dataview compatibility** requires the `> [!Synthesis]` callout with `**Contribution**::` and `**Related**::` keys (note the double-colons -- these are Dataview inline fields).
@@ -60,29 +66,27 @@ Never write any of the following (or close variants):
 5. **Tone:** Academic, precise, evidence-focused. Never promotional or speculative beyond what the data supports.
 
 ### Content Quality Requirements
-6. Every finding must be accompanied by its statistical support when available (p-value, CI, effect size).
-7. Every methodological claim must name the specific instrument, assay, or software used.
-8. Limitations must be mapped to specific threats to validity (internal, external, construct, statistical conclusion).
-9. The abstract and key takeaway must reference at least one specific numerical finding from the paper.
+
+1. Every finding must be accompanied by its statistical support when available (p-value, CI, effect size).
+2. Every methodological claim must name the specific instrument, assay, or software used.
+3. Limitations must be mapped to specific threats to validity (internal, external, construct, statistical conclusion).
+4. The abstract and key takeaway must reference at least one specific numerical finding from the paper.
 
 ## Required Output Structure
 
 Below is the EXACT structure your output must follow. Annotations in [brackets] are instructions to you -- do NOT include the brackets or instruction text in your output. Replace each [annotation] with your extracted/analyzed content.
 
----
+**Layout rules (match these exactly):** plain section headings with NO emoji or decoration; NO horizontal-rule (`---`) dividers between sections (headings alone separate them); and tight frontmatter -- no blank lines between fields, tag list indented two spaces.
 
 ---
 category: literaturenote
-
 tags:
   - #[Primary Field]
   - #[Topic Tag 1]
   - #[Topic Tag 2]
-
+  - #LiteratureNote
 citekey: [camelCase: FirstAuthorFirstWordOfTitleYear, e.g., SmithQuantum2024]
-
 status: read
-
 dateread: [Current date as YYYY-MM-DD]
 ---
 
@@ -105,7 +109,7 @@ dateread: [Current date as YYYY-MM-DD]
 
 # Notes
 
-## 🚀 Research Gap & Hypothesis
+## Research Gap & Hypothesis
 
 ### Problem Context
 
@@ -116,11 +120,12 @@ dateread: [Current date as YYYY-MM-DD]
 ### Central Hypothesis
 
 [State the main hypothesis in testable form. Distinguish between:
+
 - Explicit hypothesis (if the paper states one, quote it directly)
 - Implicit hypothesis (if you must construct it from the research question, note "Implicit:" before it)
 Format: "H1: [Independent variable/Dependent variable relationship, including direction if applicable]."]
 
-## 🔬 Methodology & Evidence Base
+## Methodology & Evidence Base
 
 ### Study Characteristics
 
@@ -140,7 +145,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 - **[[Technique/Instrument Name 2]]**: [Same format.]
 - **Statistical Software & Tests**: [List: (a) Software and version (e.g., "SPSS v28, R v4.2.3"), (b) Each statistical test used, what it was used for, and the significance threshold (e.g., "linear mixed-effects models for primary analysis, with α=0.05, Bonferroni-corrected for 3 comparisons to α=0.017").]
 
-## 📊 Key Mechanisms & Findings
+## Key Mechanisms & Findings
 
 [Create 2-4 thematic subsections. Each subsection should cover one major finding or mechanism. Use the paper's own organization if it has clear thematic sections.]
 
@@ -150,20 +155,12 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 
 **Evidence**:
 
-[Choose the table format that fits the paper type. Use Format A for primary empirical studies where stats are available. Use Format B for reviews, meta-analyses, or papers that don't report per-finding stats. Never mix formats — pick one per subsection.]
 
-**Format A — Primary empirical study (stats available):**
-| Finding | Measure | Effect Size | p-value / CI | N | Source |
-|---------|---------|-------------|--------------|---|--------|
+| Finding             | Measure        | Effect Size | p-value / CI       | N                     | Source             |
+| ------------------- | -------------- | ----------- | ------------------ | --------------------- | ------------------ |
 | [Primary finding 1] | [How measured] | [d/OR/RR/β] | [p=X, 95% CI: X-Y] | [N for this analysis] | [Table/Figure ref] |
 | [Secondary finding] | [How measured] | [d/OR/RR/β] | [p=X, 95% CI: X-Y] | [N for this analysis] | [Table/Figure ref] |
 
-**Format B — Review/synthesis (stats not reported per-finding):**
-| Finding | Measure | Direction | N | Source |
-|---------|---------|-----------|----|--------|
-| [Finding description] | [How measured] | [↑ increased / ↓ decreased / — no change] | [NA or N if known] | [Ref(s)] |
-
-> **Note on missing data**: [If the paper does not report effect sizes, p-values, CIs, or exact sample sizes, write a single consolidated note here. Never spread "not reported" across individual table cells — use "NA" in the table and explain what's missing in this note. Tell the reader which original studies to consult for full stats.]
 
 [If the paper uses a figure rather than a table to present results, describe what the figure shows in specific terms: "Figure X showed [dependent variable] as a function of [independent variable], with [group A] showing [pattern] compared to [group B]."]
 
@@ -173,7 +170,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 
 [same structure as above]
 
-## 🎯 Critical Analysis
+## Critical Analysis
 
 ### Strengths
 
@@ -205,7 +202,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 1. **[Question]**: [Why the current paper cannot answer it, and what study design would. E.g., "Does the observed effect persist beyond the 12-week follow-up? The current study cannot answer this because follow-up ended at 12 weeks. A long-term observational extension (minimum 24 months) with the same outcome measures would be needed."]
 2. [Same format -- aim for 3-5.]
 
-## 🔗 Connections & Integration
+## Connections & Integration
 
 ### Practical Implementation
 
@@ -219,17 +216,17 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 - **Potential Applications**: [What could a researcher DO with this paper's findings? E.g., "The [[ELISA]] protocol described could be adapted for measuring [[biomarker X]] in [[sample type]]."]
 - **Theoretical Implications**: [What does this paper change about how we understand the phenomenon? Does it support, refine, or challenge an existing theory? Name the theory with a wikilink.]
 
-## 📋 Action Items & Next Steps
+## Action Items & Next Steps
 
 [Create a checklist of actionable follow-ups. Each item should be specific enough that someone could act on it without re-reading the paper.]
 
-- [ ] [Specific question to investigate -- e.g., "Check whether the [[STAT3]] phosphorylation assay used here (Cell Signaling #9145) is compatible with our sample type."]
-- [ ] [Practical step -- e.g., "Compare the effect size (d=0.62) from this paper to the meta-analysis by [[AuthorYear]] to assess consistency."]
-- [ ] [Knowledge gap to address -- e.g., "The paper did not examine sex differences -- review literature on sex-dependent effects of [[pathway X]]."]
-- [ ] [Literature follow-up -- e.g., "Read [[Smith2023]] and [[Chen2024]] to understand the conflicting evidence on mechanism Y."]
-- [ ] [Method to learn/implement -- e.g., "Evaluate whether our lab can implement the [[single-cell RNA-seq]] protocol from this paper."]
+- [Specific question to investigate -- e.g., "Check whether the [[STAT3]] phosphorylation assay used here (Cell Signaling #9145) is compatible with our sample type."]
+- [Practical step -- e.g., "Compare the effect size (d=0.62) from this paper to the meta-analysis by [[AuthorYear]] to assess consistency."]
+- [Knowledge gap to address -- e.g., "The paper did not examine sex differences -- review literature on sex-dependent effects of [[pathway X]]."]
+- [Literature follow-up -- e.g., "Read [[Smith2023]] and [[Chen2024]] to understand the conflicting evidence on mechanism Y."]
+- [Method to learn/implement -- e.g., "Evaluate whether our lab can implement the [[single-cell RNA-seq]] protocol from this paper."]
 
-## 🏁 Summary & Conclusion
+## Summary & Conclusion
 
 > **Key Takeaway**: [ONE sentence that combines: the paper's most important specific finding + its broader implication. Must include at least one number. Format: "[Study type] of [sample] found that [specific finding with number] (p=[X]), suggesting that [implication]."]
 
@@ -240,3 +237,4 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 - **Innovation**: [High/Medium/Low] -- [Justification: What is genuinely new here? Is this incremental or a conceptual advance? E.g., "Medium -- the individual components (method A, outcome B) are established, but combining them to test mechanism C is novel."]
 - **Evidence Strength**: [High/Medium/Low] -- [Justification: Consider sample size, design quality, statistical rigor, replication within the paper, consistency of findings. E.g., "Medium-High -- the primary findings are supported by converging evidence from 3 independent experiments, but the N for the key subgroup analysis (N=24) is small."]
 - **Clinical/Practical Potential**: [High/Medium/Low] -- [Justification: How close is this to real-world application? What barriers remain? E.g., "Low-Medium -- mechanism established in cell lines and one animal model; human translation not yet attempted and major safety questions remain."]
+

@@ -41,6 +41,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.2] - 2026-06-30
+
+### Added
+- **`reformat` command** — a final polish pass that emits a prompt asking Claude Code to clean the raw extraction into an Obsidian-ready layout: reflow paragraphs, dehyphenate words split across line breaks, rebuild tables from the raw text, strip page/header/footer artifacts, and collapse back-matter (references, abbreviations, declarations) into foldable callouts. Like `generate`, it makes no LLM API calls — it writes the cleaned copy to `<paper>_formatted.md`. `run` now emits this prompt automatically as its final step.
+- **`scripts/templates/reformat.md`** — instruction template for the reformat pass (loaded via `importlib.resources`).
+- **`strip_heading_emoji()` in verify.py** — section checks now match headings with or without a leading emoji, so older emoji-decorated notes still verify.
+
+### Changed
+- **Clean structured-note style** — the clauderules template now produces plain section headings (no emoji) and tight frontmatter (no blank lines between fields, two-space-indented tag list), matching the polished Obsidian demo layout. `examples/example-output.md` and the verify/generate heading lists were updated to match.
+
+---
+
 ## [0.2.0] - 2026-05-05
 
 ### Added

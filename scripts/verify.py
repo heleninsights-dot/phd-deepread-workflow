@@ -13,15 +13,24 @@ import re
 # Public constants used by tests and external callers
 REQUIRED_EXTRACTION_FILES = ["*.md", "*_meta.json"]
 REQUIRED_NOTE_SECTIONS = [
-    "## 🚀 Research Gap & Hypothesis",
-    "## 🔬 Methodology & Evidence Base",
-    "## 📊 Key Mechanisms & Findings",
-    "## 🎯 Critical Analysis",
-    "## 🔗 Connections & Integration",
-    "## 📋 Action Items & Next Steps",
-    "## 🏁 Summary & Conclusion",
+    "## Research Gap & Hypothesis",
+    "## Methodology & Evidence Base",
+    "## Key Mechanisms & Findings",
+    "## Critical Analysis",
+    "## Connections & Integration",
+    "## Action Items & Next Steps",
+    "## Summary & Conclusion",
 ]
 REQUIRED_CANVAS_FIELDS = ["id", "type", "text", "x", "y", "width", "height"]
+
+# Strip a leading decorative emoji from a heading ("## 🚀 Title" -> "## Title") so
+# section checks accept both plain and older emoji-decorated notes.
+_HEADING_EMOJI = re.compile(r"^(#{1,6})\s+[^\w\s#]+\s+", re.MULTILINE)
+
+
+def strip_heading_emoji(content: str) -> str:
+    """Remove a leading emoji from each Markdown heading so plain-text matching works."""
+    return _HEADING_EMOJI.sub(r"\1 ", content)
 
 
 def verify_extraction(extract_dir):
@@ -261,20 +270,11 @@ def check_structured_note(note_path):
             if wikilink_count < 15:
                 print(f"  ⚠ Wikilink count is low ({wikilink_count}); recommend 25+ for dense concept linking")
 
-        # Check for major sections
-        required_sections = [
-            '## 🚀 Research Gap & Hypothesis',
-            '## 🔬 Methodology & Evidence Base',
-            '## 📊 Key Mechanisms & Findings',
-            '## 🎯 Critical Analysis',
-            '## 🔗 Connections & Integration',
-            '## 📋 Action Items & Next Steps',
-            '## 🏁 Summary & Conclusion'
-        ]
-
+        # Check for major sections (tolerant of older emoji-decorated headings)
+        normalized = strip_heading_emoji(content)
         present_sections = []
-        for section in required_sections:
-            if section in content:
+        for section in REQUIRED_NOTE_SECTIONS:
+            if section in normalized:
                 present_sections.append(section)
 
         if len(present_sections) >= 5:  # Most sections should be present

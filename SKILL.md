@@ -34,12 +34,23 @@ You drive the `phd-deepread` CLI on the user's behalf. The user does not type th
 phd-deepread run /path/to/paper.pdf
 ```
 
-This produces three things in `markdown_output/<paper_name>/`:
-- `<paper>.md` — extracted text
+This produces four things:
+- `markdown_output/<paper>/<paper>.md` — extracted text
 - A prompt file in `structured_literature_notes/<paper>.md` — **this is a prompt, not a finished note**
 - `<paper>.canvas` — blank 9-node template
+- A reformat prompt in `structured_literature_notes/<paper>_reformat_prompt.md` — **also a prompt**
 
-**You then write the literature note yourself.** Read the prompt file, follow the instructions inside (it includes the full `clauderules.md` template), and overwrite the prompt file with the finished note. The prompt asks for YAML frontmatter, Dataview callouts, extensive wikilinks, and academic tone — follow that exactly.
+**You then write the literature note yourself.** Read the prompt file, follow the instructions inside (it includes the full `clauderules.md` template), and overwrite the prompt file with the finished note. The prompt asks for tight YAML frontmatter, Dataview callouts, plain section headings (no emoji), extensive wikilinks, and academic tone — follow that exactly. Match `examples/example-output.md`.
+
+### Final reformat (makes the output look polished)
+
+The raw extracted text (`<paper>.md`) is faithful but ugly — broken paragraphs, hyphenated line breaks, collapsed tables, page/header artifacts. To produce the clean reading copy users expect in Obsidian, run the reformat prompt:
+
+```bash
+phd-deepread reformat markdown_output/<paper>/ -o structured_literature_notes/<paper>_reformat_prompt.md
+```
+
+Then **follow that prompt yourself**: reflow paragraphs, dehyphenate, rebuild tables from the raw text, strip page/header artifacts, and collapse back-matter (references, abbreviations, declarations) into foldable callouts — writing the result to `markdown_output/<paper>/<paper>_formatted.md`. `run` emits this prompt automatically as its final step.
 
 After the note is written, populate the canvas from it:
 
@@ -77,6 +88,7 @@ Checks formatting, YAML frontmatter, callouts, wikilinks.
 ## Templates
 
 - `scripts/templates/clauderules.md` — the literature-note template you must follow when writing the note. Loaded by `generate.py` via `importlib.resources`.
+- `scripts/templates/reformat.md` — the reformat instructions you follow in the final polish pass. Loaded by `reformat.py` via `importlib.resources`.
 - `scripts/templates/critical-thinking.canvas` — base canvas layout used by `canvas.py`.
 
 Do not edit these as part of normal use.

@@ -3,7 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI version](https://badge.fury.io/py/phd-deepread-workflow.svg)](https://pypi.org/project/phd-deepread-workflow/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Plugin-6E56CF)](https://claude.com/claude-code)
+[![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-Skill-6E56CF)](https://claude.com/claude-code)
+[![Codex Skill](https://img.shields.io/badge/Codex-Skill-000000)](https://openai.com/codex)
 [![English](https://img.shields.io/badge/README-English-blue)](README.md)
 
 > 将学术 PDF 转化为结构化的 Obsidian 文献笔记和批判性思维画布。
@@ -25,7 +26,7 @@ Bush 在 1945 年就设想了这样一张书桌——你所有的阅读内容都
 
 你需要同时具备：
 
-- **Claude Code** — [在此下载](https://claude.com/claude-code)。此工作流仅在 Claude Code 中运行。
+- **支持技能的 AI 编程助手** — **Claude Code**（[在此下载](https://claude.com/claude-code)）或 **Codex**。此工作流会作为技能安装到你所使用的助手中。
 - **Obsidian** — [在此下载](https://obsidian.md)。最终输出是 JSON 画布文件，仅在 Obsidian 中渲染。
 
 如果你只需要 AI 帮助阅读 PDF，不需要此工作流。将 PDF 拖入任何 AI 聊天窗口直接提问即可。此工作流是为需要结构化文献笔记和批判性思维画布、以便在 Obsidian 中反复查阅的人设计的。
@@ -34,13 +35,13 @@ Bush 在 1945 年就设想了这样一张书桌——你所有的阅读内容都
 
 ## 30 秒安装
 
-将此粘贴到 Claude Code 中：
+将此粘贴到 **Claude Code** 或 **Codex** 中：
 
 ```
 Install this skill for me: https://github.com/heleninsights-dot/phd-deepread-workflow
 ```
 
-Claude Code 会自动安装技能、Python CLI 及所有依赖。完成。将 PDF 拖入 Claude Code 并说 **"phd-deepread read this paper"**。
+你的助手会自动安装技能、Python CLI 及所有依赖。技能会安装到该助手的技能目录（Claude Code 为 `~/.claude/skills/`，Codex 为 `~/.codex/skills/`）——如有提示请重启助手。完成。将 PDF 拖入并说 **"phd-deepread read this paper"**。
 
 ### 可选：Tesseract OCR
 
@@ -57,21 +58,21 @@ sudo apt install tesseract-ocr  # Ubuntu/Debian
 
 ### 一篇论文
 
-将 PDF 拖入 Claude Code 并说：
+将 PDF 拖入 Claude Code 或 Codex 并说：
 
 > **phd-deepread read this paper**
 
-Claude 提取文本，撰写结构化文献笔记，并创建 9 节点批判性思维画布——一步完成。在 Obsidian 中打开 `.canvas` 文件，并排可视化论点、证据、假设和空白。
+你的助手会提取文本，撰写结构化文献笔记，并创建 9 节点批判性思维画布——一步完成。在 Obsidian 中打开 `.canvas` 文件，并排可视化论点、证据、假设和空白。
 
 你也可以请求特定步骤：*"phd-deepread extract this PDF, but just give me the prompt — I'll write the note myself."*
 
 ### 一个文件夹的论文
 
-将文件夹拖入 Claude Code 并说：
+将文件夹拖入 Claude Code 或 Codex 并说：
 
 > **phd-deepread read this folder**
 
-Claude 批量处理文件夹中的每个 PDF——提取文本、为每篇撰写结构化文献笔记、创建画布模板。已处理的论文自动跳过。与单篇论文一样，只是处理整个文件夹。
+你的助手会批量处理文件夹中的每个 PDF——提取文本、为每篇撰写结构化文献笔记、创建画布模板。已处理的论文自动跳过。与单篇论文一样，只是处理整个文件夹。
 
 ---
 
@@ -102,7 +103,7 @@ Claude 批量处理文件夹中的每个 PDF——提取文本、为每篇撰写
 
 ## CLI 参考
 
-Claude Code 会为你调用这些命令——你无需手动输入：
+你的助手（Claude Code 或 Codex）会为你调用这些命令——你无需手动输入：
 
 | 命令 | 功能 |
 |---------|-------------|
