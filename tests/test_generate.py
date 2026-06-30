@@ -146,7 +146,7 @@ class TestGenerateModule:
         # Check that template appears
         assert "category: literaturenote" in prompt
 
-        # Check that extracted text appears (truncated)
+        # Check that extracted text appears (full text)
         assert "Test Paper" in prompt
 
 

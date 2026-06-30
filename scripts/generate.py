@@ -166,13 +166,11 @@ I need you to generate a structured, evidence-dense literature note for the foll
 - **Citekey**: {citekey}
 
 ## Extracted PDF Content
-Below is the raw text extracted from the PDF (via Text-First decision tree using PyMuPDF for searchable text + Tesseract OCR fallback):
+Below is the full text extracted from the PDF (via Text-First decision tree using PyMuPDF for searchable text + Tesseract OCR fallback):
 
 ```markdown
-{extracted_text[:5000]}
+{extracted_text}
 ```
-
-[Content truncated for brevity. Full text available in extraction directory.]
 
 ## Template to Follow
 You MUST follow this exact `.clauderules` template:

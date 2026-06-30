@@ -13,7 +13,6 @@ from scripts.canvas import create_canvas_template, main as canvas_main
 
 def run_all(pdf_path, notes_dir="structured_literature_notes"):
     paper_name = Path(pdf_path).stem.strip()
-    extraction_folder = f"markdown_output/{paper_name}"
     note_output = f"{notes_dir}/{paper_name}.md"
     canvas_output = f"{notes_dir}/{paper_name}.canvas"
     reformat_output = f"{notes_dir}/{paper_name}_reformat_prompt.md"
@@ -22,11 +21,12 @@ def run_all(pdf_path, notes_dir="structured_literature_notes"):
 
     # Step 1: Extract — direct function call, no subprocess
     print("\nStep 1: Extracting PDF...")
-    result = extract_pdf(pdf_path)
+    result = extract_pdf(pdf_path, output_dir="markdown_output")
     if not result.get("success"):
         print(f"❌ Extraction failed: {result.get('error')}")
         return 1
-    print(f"✅ Extraction complete — output: {result.get('output_dir')}")
+    extraction_folder = result.get("output_dir", f"markdown_output/{paper_name}")
+    print(f"✅ Extraction complete — output: {extraction_folder}")
 
     # Step 2: Generate prompt — invoke main with synthetic argv
     print("\nStep 2: Generating literature-note prompt...")

@@ -10,7 +10,7 @@
       "name": "phd-deepread",
       "source": "./",
       "description": "Transform academic PDFs into structured literature notes and critical-thinking canvases for Obsidian. Extracts PDFs, generates structured notes with Claude, and creates 9-node critical-thinking canvases.",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "author": {
         "name": "Helen Insights",
         "email": "heleninsights@gmail.com"
