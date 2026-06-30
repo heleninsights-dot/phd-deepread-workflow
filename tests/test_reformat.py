@@ -65,7 +65,9 @@ class TestReformatModule:
 
     def test_create_reformat_prompt_handles_missing_info(self):
         """Missing paper metadata falls back to placeholder labels."""
-        prompt = reformat.create_reformat_prompt("raw text", "to {output_path}", {}, "out.md")
+        prompt = reformat.create_reformat_prompt(
+            "raw text", "to {output_path}", {}, "out.md"
+        )
         assert "Unknown Title" in prompt
         assert "raw text" in prompt
         assert "out.md" in prompt
@@ -75,11 +77,15 @@ class TestReformatTemplate:
     """Test that the reformat template carries the required instructions."""
 
     def test_template_exists(self):
-        template_path = Path(__file__).parent.parent / "scripts" / "templates" / "reformat.md"
+        template_path = (
+            Path(__file__).parent.parent / "scripts" / "templates" / "reformat.md"
+        )
         assert template_path.exists(), f"Template not found at {template_path}"
 
     def test_template_has_required_operations(self):
-        template_path = Path(__file__).parent.parent / "scripts" / "templates" / "reformat.md"
+        template_path = (
+            Path(__file__).parent.parent / "scripts" / "templates" / "reformat.md"
+        )
         content = template_path.read_text(encoding="utf-8").lower()
 
         # The five core operations the user asked for

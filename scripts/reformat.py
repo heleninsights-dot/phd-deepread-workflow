@@ -29,7 +29,7 @@ try:
         guess_paper_info_from_filename,
     )
 except ImportError:
-    from generate import (
+    from generate import (  # type: ignore[no-redef,import-not-found]
         find_extracted_files,
         load_template,
         extract_paper_info,
@@ -37,7 +37,7 @@ except ImportError:
     )
 
 
-def formatted_output_path(files):
+def formatted_output_path(files: dict) -> str:
     """Where Claude Code should write the cleaned markdown: <paper>_formatted.md."""
     markdown = files["markdown"]
     if markdown is not None:
@@ -47,7 +47,9 @@ def formatted_output_path(files):
     return str(directory / f"{directory.name}_formatted.md")
 
 
-def create_reformat_prompt(extracted_text, template, paper_info, output_path):
+def create_reformat_prompt(
+    extracted_text: str, template: str, paper_info: dict, output_path: str
+) -> str:
     """Create a formatted reformat prompt for Claude Code."""
     # The template carries the reformat instructions and an {output_path} slot.
     instructions = template.replace("{output_path}", output_path)
@@ -82,7 +84,7 @@ Ready? Reformat the content above and write the result to `{output_path}`.
 """
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser(
         description="Prepare a reformat prompt that cleans extracted markdown into "
         "an Obsidian-ready layout (for Claude Code to execute)"

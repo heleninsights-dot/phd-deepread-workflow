@@ -55,27 +55,28 @@ def run_all(pdf_path, notes_dir="structured_literature_notes"):
     # Obsidian-ready layout. Non-fatal: a failure here doesn't sink the run.
     print("\nStep 4: Generating final reformat prompt...")
     sys.argv = ["reformat", extraction_folder, "-o", reformat_output]
+    reformat_ok = True
     try:
         ret = reformat_main()
         if ret != 0:
             print("⚠ Reformat prompt generation failed — skipping (run "
                   "`phd-deepread reformat` manually).")
-            reformat_output = None
+            reformat_ok = False
     finally:
         sys.argv = saved_argv
 
-    print(f"\n--- Workflow Complete! ---")
+    print("\n--- Workflow Complete! ---")
     print(f"  Literature-note prompt : {note_output}")
     print(f"  Canvas                 : {canvas_output}")
-    if reformat_output:
+    if reformat_ok:
         print(f"  Reformat prompt        : {reformat_output}")
     print()
     print("📋 Next: open the prompt file in Claude Code and ask Claude to write the note,")
     print("   then optionally re-run `phd-deepread canvas --from-note <note.md> -o <canvas>`")
     print("   to populate the canvas from the finished note.")
-    if reformat_output:
-        print("   For the cleanest reading copy, also run the reformat prompt to produce")
-        print("   <paper>_formatted.md from the raw extraction.")
+    if reformat_ok:
+        print("   For the cleanest reading copy, also run the reformat")
+        print("   prompt to produce <paper>_formatted.md.")
 
     return 0
 

@@ -23,12 +23,12 @@ REQUIRED_NOTE_SECTIONS = [
 ]
 REQUIRED_CANVAS_FIELDS = ["id", "type", "text", "x", "y", "width", "height"]
 
-# Matches a leading decorative emoji on a heading, e.g. "## 🚀 Title" -> "## Title".
-# Lets section checks accept both the current plain headings and older emoji-decorated notes.
+# Strip a leading decorative emoji from a heading ("## 🚀 Title" -> "## Title") so
+# section checks accept both plain and older emoji-decorated notes.
 _HEADING_EMOJI = re.compile(r"^(#{1,6})\s+[^\w\s#]+\s+", re.MULTILINE)
 
 
-def strip_heading_emoji(content):
+def strip_heading_emoji(content: str) -> str:
     """Remove a leading emoji from each Markdown heading so plain-text matching works."""
     return _HEADING_EMOJI.sub(r"\1 ", content)
 
