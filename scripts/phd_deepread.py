@@ -23,6 +23,7 @@ def main():
         "setup": "doctor.py",  # alias for backwards compatibility
         "extract": "extract.py",
         "generate": "generate.py",
+        "reformat": "reformat.py",
         "canvas": "canvas.py",
         "run": "process.py",
         "batch": "batch.py",
@@ -92,6 +93,7 @@ Commands:
   doctor      Check dependencies and environment setup (alias: setup)
   extract     Extract text/images from PDFs (PyMuPDF + Tesseract OCR fallback)
   generate    Build a literature-note prompt from extracted text — paste into Claude Code
+  reformat    Build a prompt to clean extracted markdown into an Obsidian-ready layout
   canvas      Create a 9-node JSON Canvas; --from-note populates nodes from a finished note
   run         Run full pipeline: extract → generate prompt → canvas
   batch       Batch process multiple PDFs
@@ -103,6 +105,7 @@ Examples:
   phd-deepread doctor
   phd-deepread extract paper.pdf -o markdown_output/
   phd-deepread generate markdown_output/paper/ -o notes/paper.md
+  phd-deepread reformat markdown_output/paper/ -o notes/paper_reformat_prompt.md
   phd-deepread canvas -o notes/paper.canvas --from-note notes/paper.md
   phd-deepread run paper.pdf
   phd-deepread batch papers/ -o literature_notes/

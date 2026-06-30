@@ -178,13 +178,13 @@ class TestTemplateStructure:
 
         # Required sections
         assert "# Notes" in template_content
-        assert "## 🚀 Research Gap & Hypothesis" in template_content
-        assert "## 🔬 Methodology & Evidence Base" in template_content
-        assert "## 📊 Key Mechanisms & Findings" in template_content
-        assert "## 🎯 Critical Analysis" in template_content
-        assert "## 🔗 Connections & Integration" in template_content
-        assert "## 📋 Action Items & Next Steps" in template_content
-        assert "## 🏁 Summary & Conclusion" in template_content
+        assert "## Research Gap & Hypothesis" in template_content
+        assert "## Methodology & Evidence Base" in template_content
+        assert "## Key Mechanisms & Findings" in template_content
+        assert "## Critical Analysis" in template_content
+        assert "## Connections & Integration" in template_content
+        assert "## Action Items & Next Steps" in template_content
+        assert "## Summary & Conclusion" in template_content
 
 
 if __name__ == "__main__":

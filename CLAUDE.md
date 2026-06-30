@@ -31,6 +31,7 @@ make publish                            # upload to PyPI
 phd-deepread doctor                       # check dependencies
 phd-deepread extract paper.pdf -o markdown_output/
 phd-deepread generate markdown_output/paper/
+phd-deepread reformat markdown_output/paper/  # prompt to clean extraction → <paper>_formatted.md
 phd-deepread canvas --title "Title" --authors "Author" --year "2024"
 phd-deepread run paper.pdf              # full pipeline: extract → generate → canvas
 phd-deepread batch papers/ -o output/
@@ -45,9 +46,10 @@ The CLI entry point is `scripts/phd_deepread.py:main()`, which dispatches comman
 |---------|--------|------|
 | `doctor` (alias `setup`) | `scripts/doctor.py` | Dependency / first-run check |
 | `extract` | `scripts/extract.py` | PDF → Markdown + images |
-| `generate` | `scripts/generate.py` | Markdown → Claude prompt |
+| `generate` | `scripts/generate.py` | Markdown → Claude prompt (structured literature note) |
+| `reformat` | `scripts/reformat.py` | Extracted Markdown → Claude prompt that cleans it into an Obsidian-ready layout |
 | `canvas` | `scripts/canvas.py` | → 9-node JSON Canvas file (optionally populated from a finished note via `--from-note`) |
-| `run` | `scripts/process.py` | Orchestrates extract → generate prompt → canvas |
+| `run` | `scripts/process.py` | Orchestrates extract → generate prompt → canvas → reformat prompt |
 | `verify` | `scripts/verify.py` | Quality checks on output directory |
 | `batch` | `scripts/batch.py` | Loop `run` over a folder of PDFs |
 
@@ -65,6 +67,12 @@ Output per paper: `markdown_output/<paper_name>/` containing a `.md` file, `*_me
 
 Reads the extracted markdown and loads the **clauderules template** from `scripts/templates/clauderules.md` using `importlib.resources` (reliable in installed packages). It builds a formatted prompt for Claude Code to generate a structured literature note. Does not call any LLM directly — it prepares the prompt and prints it (or writes it to `-o <file>`) for Claude Code to consume.
 
+The clauderules template produces **plain section headings (no emoji) and tight frontmatter** to match the polished Obsidian demo style — see `examples/example-output.md`. `verify.py` matches headings emoji-tolerantly (`strip_heading_emoji`) so older emoji-decorated notes still pass.
+
+### Final Reformat (`reformat.py`)
+
+A **prompt-only polish pass** that mirrors `generate.py`: it reuses `generate.py`'s `find_extracted_files` / `load_template` / `extract_paper_info` helpers, loads `scripts/templates/reformat.md`, embeds the *full* extracted text (not truncated), and emits a prompt asking Claude Code to reflow paragraphs, dehyphenate, rebuild tables, strip page/header artifacts, and collapse back-matter (references, abbreviations, declarations) into foldable Obsidian callouts. Claude Code writes the cleaned copy to `<paper>_formatted.md` inside the extraction directory — the filename the rest of the pipeline already treats as the polished version (`generate.py`/`verify.py` exclude `_formatted.md` from extraction-source globbing). Like `generate.py`, it makes no LLM API calls. In `run`, this is the final, non-fatal step.
+
 ### Canvas Creation (`canvas.py`)
 
 Produces a JSON file compatible with Obsidian Canvas plugin. The canvas has 9 fixed nodes (core argument, assumptions, evidence assessment, alternative explanations, methodological critique, personal relevance, future directions, critical questions, hypothesis center) with pre-defined spatial layout and labeled edges connecting nodes in a critical-thinking flow.
@@ -72,9 +80,10 @@ Produces a JSON file compatible with Obsidian Canvas plugin. The canvas has 9 fi
 ### Templates (`scripts/templates/`)
 
 - `clauderules.md` — Instruction-driven template (~230 lines) defining the structured literature note format with anti-shallow protocol, evidence tables, and validity-mapped critique. Loaded via `importlib.resources` in `generate.py`.
+- `reformat.md` — Instruction-driven template for the final reformat pass (reflow/dehyphenate/rebuild-tables/strip-artifacts/collapse-back-matter). Loaded via `importlib.resources` in `reformat.py`. Contains an `{output_path}` placeholder the script fills in. Do **not** add triple-backtick fences to this or `clauderules.md` — both are embedded inside a fenced block in the generated prompt, so nested fences would break it.
 - `critical-thinking.canvas` — base canvas layout used by `canvas.py`.
 
-Both files must stay in `scripts/templates/` and are declared as `package_data` in `pyproject.toml`.
+These files must stay in `scripts/templates/` and are covered by the `templates/*` `package_data` glob in `pyproject.toml`.
 
 ## Key Design Decisions
 

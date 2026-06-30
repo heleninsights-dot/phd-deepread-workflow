@@ -76,23 +76,19 @@ Never write any of the following (or close variants):
 
 Below is the EXACT structure your output must follow. Annotations in [brackets] are instructions to you -- do NOT include the brackets or instruction text in your output. Replace each [annotation] with your extracted/analyzed content.
 
----
+**Layout rules (match these exactly):** plain section headings with NO emoji or decoration; NO horizontal-rule (`---`) dividers between sections (headings alone separate them); and tight frontmatter -- no blank lines between fields, tag list indented two spaces.
 
 ---
-
 category: literaturenote
-
 tags:
-
-- #[Primary Field]
-- #[Topic Tag 1]
-- #[Topic Tag 2]
-
+  - #[Primary Field]
+  - #[Topic Tag 1]
+  - #[Topic Tag 2]
+  - #LiteratureNote
 citekey: [camelCase: FirstAuthorFirstWordOfTitleYear, e.g., SmithQuantum2024]
-
 status: read
-
-## dateread: [Current date as YYYY-MM-DD]
+dateread: [Current date as YYYY-MM-DD]
+---
 
 > [!Citation]
 > [Full APA 7th edition citation: Author, A. A., & Author, B. B. (Year). Title of article: Subtitle. *Journal Name*, Volume(Issue), Page range. DOI]
@@ -113,7 +109,7 @@ status: read
 
 # Notes
 
-## 🚀 Research Gap & Hypothesis
+## Research Gap & Hypothesis
 
 ### Problem Context
 
@@ -129,7 +125,7 @@ status: read
 - Implicit hypothesis (if you must construct it from the research question, note "Implicit:" before it)
 Format: "H1: [Independent variable/Dependent variable relationship, including direction if applicable]."]
 
-## 🔬 Methodology & Evidence Base
+## Methodology & Evidence Base
 
 ### Study Characteristics
 
@@ -149,7 +145,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 - **[[Technique/Instrument Name 2]]**: [Same format.]
 - **Statistical Software & Tests**: [List: (a) Software and version (e.g., "SPSS v28, R v4.2.3"), (b) Each statistical test used, what it was used for, and the significance threshold (e.g., "linear mixed-effects models for primary analysis, with α=0.05, Bonferroni-corrected for 3 comparisons to α=0.017").]
 
-## 📊 Key Mechanisms & Findings
+## Key Mechanisms & Findings
 
 [Create 2-4 thematic subsections. Each subsection should cover one major finding or mechanism. Use the paper's own organization if it has clear thematic sections.]
 
@@ -174,7 +170,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 
 [same structure as above]
 
-## 🎯 Critical Analysis
+## Critical Analysis
 
 ### Strengths
 
@@ -206,7 +202,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 1. **[Question]**: [Why the current paper cannot answer it, and what study design would. E.g., "Does the observed effect persist beyond the 12-week follow-up? The current study cannot answer this because follow-up ended at 12 weeks. A long-term observational extension (minimum 24 months) with the same outcome measures would be needed."]
 2. [Same format -- aim for 3-5.]
 
-## 🔗 Connections & Integration
+## Connections & Integration
 
 ### Practical Implementation
 
@@ -220,7 +216,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 - **Potential Applications**: [What could a researcher DO with this paper's findings? E.g., "The [[ELISA]] protocol described could be adapted for measuring [[biomarker X]] in [[sample type]]."]
 - **Theoretical Implications**: [What does this paper change about how we understand the phenomenon? Does it support, refine, or challenge an existing theory? Name the theory with a wikilink.]
 
-## 📋 Action Items & Next Steps
+## Action Items & Next Steps
 
 [Create a checklist of actionable follow-ups. Each item should be specific enough that someone could act on it without re-reading the paper.]
 
@@ -230,7 +226,7 @@ Format: "H1: [Independent variable/Dependent variable relationship, including di
 - [Literature follow-up -- e.g., "Read [[Smith2023]] and [[Chen2024]] to understand the conflicting evidence on mechanism Y."]
 - [Method to learn/implement -- e.g., "Evaluate whether our lab can implement the [[single-cell RNA-seq]] protocol from this paper."]
 
-## 🏁 Summary & Conclusion
+## Summary & Conclusion
 
 > **Key Takeaway**: [ONE sentence that combines: the paper's most important specific finding + its broader implication. Must include at least one number. Format: "[Study type] of [sample] found that [specific finding with number] (p=[X]), suggesting that [implication]."]
 
